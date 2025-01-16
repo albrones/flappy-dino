@@ -11,6 +11,7 @@ kaboom();
 // const play = (): void => {
 // load assets
 loadSprite('bean', '/sprites/bean.png');
+loadSound('blip', '/audio/score.mp3');
 scene('game', () => {
   // define gravity
   setGravity(1600);
@@ -38,6 +39,7 @@ scene('game', () => {
   function jump() {
     if (player.isGrounded()) {
       player.jump(JUMP_FORCE);
+      play('blip');
     }
   }
 
@@ -69,7 +71,7 @@ scene('game', () => {
   player.onCollide('tree', () => {
     // go to "lose" scene and pass the score
     go('lose', score);
-    burp();
+    burp({ volume: 0.5, detune: 800 });
     addKaboom(player.pos);
   });
 
