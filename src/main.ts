@@ -1,5 +1,6 @@
 import kaboom from 'kaboom';
 import 'kaboom/global';
+import { initLooseScene } from './loose';
 
 const FLOOR_HEIGHT = 48;
 const JUMP_FORCE = 800;
@@ -36,7 +37,7 @@ scene('game', () => {
 
   generateWorld();
 
-  // jump when user press space
+  // jump when user press space or click
   onKeyPress('space', jump);
   onClick(jump);
 
@@ -63,26 +64,7 @@ scene('game', () => {
   });
 });
 
-scene('lose', (score) => {
-  add([
-    sprite('bean'),
-    pos(width() / 2, height() / 2 - 80),
-    scale(2),
-    anchor('center'),
-  ]);
-
-  // display score
-  add([
-    text(score),
-    pos(width() / 2, height() / 2 + 80),
-    scale(2),
-    anchor('center'),
-  ]);
-
-  // go back to game with space is pressed
-  onKeyPress('space', () => go('game'));
-  onClick(() => go('game'));
-});
+initLooseScene();
 
 go('game');
 // };
