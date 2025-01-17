@@ -12,6 +12,8 @@ kaboom();
 // load assets
 loadSprite('bean', '/sprites/bean.png');
 loadSound('blip', '/audio/score.mp3');
+
+/* Main scene */
 scene('game', () => {
   // define gravity
   setGravity(1600);
@@ -24,18 +26,7 @@ scene('game', () => {
     area(),
     body(),
   ]);
-
-  // floor
-  add([
-    rect(width(), FLOOR_HEIGHT),
-    outline(4),
-    pos(0, height()),
-    anchor('botleft'),
-    area(),
-    body({ isStatic: true }),
-    color(127, 200, 255),
-  ]);
-
+  /* player action */
   function jump() {
     if (player.isGrounded()) {
       player.jump(JUMP_FORCE);
@@ -43,29 +34,14 @@ scene('game', () => {
     }
   }
 
+  generateWorld();
+
   // jump when user press space
   onKeyPress('space', jump);
   onClick(jump);
 
-  function spawnTree() {
-    // add tree obj
-    add([
-      rect(48, rand(32, 96)),
-      area(),
-      outline(4),
-      pos(width(), height() - FLOOR_HEIGHT),
-      anchor('botleft'),
-      color(255, 180, 255),
-      move(LEFT, SPEED),
-      'tree',
-    ]);
-
-    // wait a random amount of time to spawn next tree
-    wait(rand(0.5, 1.5), spawnTree);
-  }
-
   // start spawning trees
-  spawnTree();
+  spawnTrees();
 
   // lose if player collides with any game obj with tag "tree"
   player.onCollide('tree', () => {
@@ -88,10 +64,20 @@ scene('game', () => {
 });
 
 scene('lose', (score) => {
-  add([sprite('bean'), pos(width() / 2, height() / 2 - 80), scale(2), anchor('center')]);
+  add([
+    sprite('bean'),
+    pos(width() / 2, height() / 2 - 80),
+    scale(2),
+    anchor('center'),
+  ]);
 
   // display score
-  add([text(score), pos(width() / 2, height() / 2 + 80), scale(2), anchor('center')]);
+  add([
+    text(score),
+    pos(width() / 2, height() / 2 + 80),
+    scale(2),
+    anchor('center'),
+  ]);
 
   // go back to game with space is pressed
   onKeyPress('space', () => go('game'));
@@ -101,3 +87,60 @@ scene('lose', (score) => {
 go('game');
 // };
 // export { play };
+
+function spawnTreeFloor() {
+  add([
+    rect(48, rand(32, 96)),
+    area(),
+    outline(4),
+    pos(width(), height() - FLOOR_HEIGHT),
+    anchor('botleft'),
+    color(255, 180, 255),
+    move(LEFT, SPEED),
+    'tree',
+  ]);
+  // wait a random amount of time to spawn next tree
+  wait(rand(0.5, 1.5), spawnTreeFloor);
+}
+
+function spawnTreeCeiling() {
+  add([
+    rect(48, rand(32, 96)),
+    area(),
+    outline(4),
+    pos(width(), FLOOR_HEIGHT),
+    anchor('topleft'),
+    color(255, 180, 255),
+    move(LEFT, SPEED),
+    'tree',
+  ]);
+  // wait a random amount of time to spawn next tree
+  wait(rand(0.5, 1.5), spawnTreeCeiling);
+}
+
+function spawnTrees() {
+  spawnTreeFloor();
+  spawnTreeCeiling();
+}
+
+function generateWorld() {
+  const floor = add([
+    rect(width(), FLOOR_HEIGHT),
+    outline(4),
+    pos(0, height()),
+    anchor('botleft'),
+    area(),
+    body({ isStatic: true }),
+    color(127, 200, 255),
+  ]);
+
+  const ceiling = add([
+    rect(width(), FLOOR_HEIGHT),
+    outline(4),
+    pos(0, 0),
+    anchor('topleft'),
+    area(),
+    body({ isStatic: true }),
+    color(127, 200, 255),
+  ]);
+}
