@@ -1,7 +1,7 @@
 import kaboom from 'kaboom';
 import 'kaboom/global';
 import { initGame as initGameScene } from './game';
-import { initLooseScene } from './loose';
+import { initLooseScene } from './lose';
 
 // initialize context
 kaboom();
