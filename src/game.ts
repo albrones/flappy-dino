@@ -1,7 +1,8 @@
-import 'kaboom/global';
+import { GameObj } from 'kaplay';
 
-const FLOOR_HEIGHT = 48;
-const CEILING_HEIGHT = 62;
+const FLOOR_HEIGHT = 86;
+const TREE_DEFAULT_SIZE = 50;
+const CEILING_HEIGHT = 124;
 const JUMP_FORCE = 800;
 const SPEED = 480;
 
@@ -14,15 +15,17 @@ export const initGame = () => {
     const player = add([
       // list of components
       sprite('bean'),
-      pos(80, 40),
+      pos(80, FLOOR_HEIGHT),
       area(),
       body(),
     ]);
+
     /* player action */
     function jump() {
       // if (player.isGrounded()) {
       player.jump(JUMP_FORCE);
       play('blip');
+      shake(3);
       // }
     }
 
@@ -36,11 +39,16 @@ export const initGame = () => {
     spawnTrees();
 
     // lose if player collides with any game obj with tag "tree"
-    player.onCollide('tree', () => {
+    player.onCollide('collider', () => {
       // go to "lose" scene and pass the score
-      go('lose', score);
-      burp({ volume: 0.5, detune: 800 });
       addKaboom(player.pos);
+      shake(120);
+      burp({ volume: 0.5 /* detune: 800 */ });
+      wait(0.3, () => go('lose', score));
+      addKaboom(player.pos);
+      wait(0.1, () => addKaboom(player.pos, {}));
+      wait(0.2, () => addKaboom(player.pos));
+      wait(0.3, () => addKaboom(player.pos));
     });
 
     // keep track of score
@@ -55,9 +63,29 @@ export const initGame = () => {
   });
 };
 
+const addLeaf = (tree: GameObj, i: number, top?: boolean) => {
+  const sign = top ? -1 : 1;
+  const heightFactor = i + 1;
+  const leafGrowthFactor = heightFactor * 10;
+  const leaftWidth = tree.width * 2.3 - leafGrowthFactor;
+  const leaftRadius = leaftWidth / Math.sqrt(2);
+  const treeCenter = tree.width / 2;
+  const rotation = top ? -135 : 45;
+  tree.add([
+    polygon([vec2(0, leaftWidth), vec2(leaftWidth, 0), vec2(0, 0)]),
+    pos(treeCenter, sign * (-tree.height + 15 - leaftRadius * heightFactor)),
+    area(),
+    rotate(rotation),
+    outline(4),
+    color(0, 180, 0),
+    'leaf',
+    'collider',
+  ]);
+};
+
 function spawnTreeFloor() {
-  add([
-    rect(48, rand(32, 96)),
+  let tree = add([
+    rect(TREE_DEFAULT_SIZE, rand(32, 96)),
     area(),
     outline(4),
     pos(width(), height() - FLOOR_HEIGHT),
@@ -65,14 +93,19 @@ function spawnTreeFloor() {
     color(255, 180, 255),
     move(LEFT, SPEED),
     'tree',
+    'collider',
   ]);
+  const nbLeaf = rand(2, 5);
+  for (let i = 0; i <= nbLeaf; i++) {
+    addLeaf(tree, i);
+  }
   // wait a random amount of time to spawn next tree
   wait(rand(0.5, 1.5), spawnTreeFloor);
 }
 
 function spawnTreeCeiling() {
-  add([
-    rect(48, rand(32, 96)),
+  const tree = add([
+    rect(TREE_DEFAULT_SIZE, rand(32, 96)),
     area(),
     outline(4),
     pos(width(), CEILING_HEIGHT),
@@ -80,8 +113,14 @@ function spawnTreeCeiling() {
     color(255, 180, 255),
     move(LEFT, SPEED),
     'tree',
+    'collider',
   ]);
+  const nbLeaf = rand(2, 5);
+  for (let i = 0; i <= nbLeaf; i++) {
+    addLeaf(tree, i, true);
+  }
   // wait a random amount of time to spawn next tree
+  //TODO: add same leaft to ceiling
   wait(rand(0.5, 1.5), spawnTreeCeiling);
 }
 
@@ -99,6 +138,7 @@ function generateWorld() {
     area(),
     body({ isStatic: true }),
     color(127, 200, 255),
+    'floor',
   ]);
 
   const ceiling = add([
@@ -109,5 +149,6 @@ function generateWorld() {
     area(),
     body({ isStatic: true }),
     color(127, 200, 255),
+    'ceiling',
   ]);
 }
