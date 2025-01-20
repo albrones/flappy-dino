@@ -1,5 +1,3 @@
-import 'kaboom/global';
-
 export const initLooseScene = () => {
   scene('lose', (score) => {
     const character = add([

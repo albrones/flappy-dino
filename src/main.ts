@@ -1,10 +1,10 @@
-import kaboom from 'kaboom';
-import 'kaboom/global';
+import kaplay from 'kaplay';
+import 'kaplay/global';
 import { initGame as initGameScene } from './game';
 import { initLooseScene } from './lose';
 
 // initialize context
-kaboom();
+kaplay();
 
 // load assets
 loadSprite('bean', '/sprites/bean.png');
