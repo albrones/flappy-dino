@@ -1,30 +1,12 @@
-import kaplay from 'kaplay';
-import 'kaplay/global';
-import { initGame as initGameScene } from './game';
-import { initLooseScene } from './lose';
+import { k } from './kaplayLoader';
+import { initGameScene } from './scenes/game';
+import { initLoseScene } from './scenes/lose';
+import { initPlayButton } from './ui/playButton';
 
-// initialize context
-kaplay();
-
-// load assets
-loadSprite('bean', '/sprites/bean.png');
-loadSound('blip', '/audio/score.mp3');
-
-//init scenes
-initGameScene();
-initLooseScene();
-
-// display button play
-const buttonPlay = add([
-  rect(80, 48),
-  area(),
-  outline(4),
-  pos(width() / 2, height() / 2 + 160),
-  scale(2),
-  anchor('center'),
-  color(127, 200, 255),
-  'button',
-]);
-add([pos(width() / 2, height() / 2 + 160), anchor('center'), text('PLAY')]);
-
-buttonPlay.onClick(() => go('game'));
+k.scene('game', () => {
+  initGameScene(k);
+});
+k.scene('lose', (score) => {
+  initLoseScene(k, score);
+});
+initPlayButton(k);
