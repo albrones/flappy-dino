@@ -34,13 +34,13 @@ export const initGameScene = (k: KAPLAYCtx<{}, never>) => {
 
   spawnTrees(k);
 
-  // lose if player collides with any game obj with tag "collider"
+  // menu if player collides with any game obj with tag "collider"
   player.onCollide('collider', () => {
-    // go to "lose" scene and pass the score
+    // go to "menu" scene and pass the score
     k.addKaboom(player.pos);
     k.shake(120);
     k.burp({ volume: 0.5 /* detune: 800 */ });
-    k.wait(0.3, () => k.go('lose', score));
+    k.wait(0.3, () => k.go('menu-score', score));
     k.addKaboom(player.pos);
     k.wait(0.1, () => k.addKaboom(player.pos));
     k.wait(0.2, () => k.addKaboom(player.pos));
