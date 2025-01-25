@@ -1,76 +1,60 @@
 import { KAPLAYCtx } from 'kaplay';
-
-const generateNewCharacter = (
-  k: KAPLAYCtx<{}, never>,
-  currentCharacter: string
-) => {
-  return k.make([
-    k.sprite(currentCharacter),
-    k.pos(k.width() / 2, k.height() / 2 - 80),
-    k.scale(2),
-    k.anchor('center'),
-    'player',
-  ]);
-};
+import { characterList } from '../main';
 
 export const initMenuScoreScene = (
   k: KAPLAYCtx<{}, never>,
   score: string,
   playerSprite: string
 ) => {
-  const characterList = ['bean', 'monster-1'];
-  let currentCharacter: string = playerSprite;
+  let currentCharacterIndex = characterList.indexOf(playerSprite);
 
-  let frame = k.add(generateNewCharacter(k, currentCharacter));
-  let currentCharacterIndex = 0;
-
-  if (currentCharacter) {
-    const updateCharacterButtonRight = k.add([
-      k.circle(24),
-      k.area(),
-      k.outline(4),
-      k.pos(k.width() / 2 + 120, k.height() / 2 - 80),
+  function generateNewCharacter(k: KAPLAYCtx<{}, never>) {
+    return k.make([
+      k.sprite(playerSprite),
+      k.pos(k.width() / 2, k.height() / 2 - 80),
       k.scale(2),
       k.anchor('center'),
-      k.color(127, 200, 255),
-      'button',
+      'player',
     ]);
-    const updateCharacterButtonLeft = k.add([
-      k.circle(24),
-      k.area(),
-      k.outline(4),
-      k.pos(k.width() / 2 - 120, k.height() / 2 - 80),
-      k.scale(2),
-      k.anchor('center'),
-      k.color(127, 200, 255),
-      'button',
-    ]);
-    updateCharacterButtonRight.add([k.anchor('center'), k.text('>')]);
-    updateCharacterButtonLeft.add([k.anchor('center'), k.text('<')]);
-    updateCharacterButtonRight.onClick(() => {
-      if (currentCharacterIndex < characterList.length - 1) {
-        currentCharacter = characterList[currentCharacterIndex + 1];
-        currentCharacterIndex = currentCharacterIndex + 1;
-      } else {
-        currentCharacter = characterList[0];
-        currentCharacterIndex = 0;
-      }
-      k.destroy(frame);
-      frame = k.add(generateNewCharacter(k, currentCharacter));
-    });
-    updateCharacterButtonLeft.onClick(() => {
-      if (currentCharacterIndex > 0) {
-        currentCharacter = characterList[currentCharacterIndex - 1];
-        currentCharacterIndex = currentCharacterIndex - 1;
-      } else {
-        currentCharacter = characterList[0];
-        currentCharacterIndex = 0;
-      }
-      k.destroy(frame);
-      frame = k.add(generateNewCharacter(k, currentCharacter));
-      k.debug.log('char', currentCharacter);
-    });
   }
+
+  function generateSelectButton(k: KAPLAYCtx<{}, never>, right?: boolean) {
+    const sign = right ? 1 : -1;
+    const btn = k.add([
+      k.circle(24),
+      k.area(),
+      k.outline(4),
+      k.pos(k.width() / 2 + 120 * sign, k.height() / 2 - 80),
+      k.scale(2),
+      k.anchor('center'),
+      k.color(127, 200, 255),
+      'button',
+      'select',
+    ]);
+    btn.add([k.anchor('center'), k.text(right ? '>' : '<')]);
+    btn.onClick(() => {
+      updateCharacter(right);
+    });
+    return btn;
+  }
+
+  function updateCharacter(right?: boolean) {
+    if (right) {
+      playerSprite = characterList[(currentCharacterIndex + 1) % 2];
+      currentCharacterIndex = currentCharacterIndex + 1;
+    } else if (!right) {
+      playerSprite = characterList[(currentCharacterIndex - 1) % 2];
+      currentCharacterIndex = currentCharacterIndex - 1;
+    } else {
+      playerSprite = characterList[0];
+      currentCharacterIndex = 0;
+    }
+    character.use(sprite(playerSprite));
+  }
+
+  const character = k.add(generateNewCharacter(k));
+  const selectNextCharacterBtn = generateSelectButton(k, true);
+  const selectPreviousCharacterBtn = generateSelectButton(k);
 
   if (score) {
     const scoreText = k.add([
@@ -97,5 +81,6 @@ export const initMenuScoreScene = (
     k.text('PLAY'),
   ]);
 
-  playButton.onClick(() => k.go('game', currentCharacter));
+  playButton.onClick(() => k.go('game', playerSprite));
+  k.onKeyPress('space', () => k.go('game', playerSprite));
 };
