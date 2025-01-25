@@ -6,12 +6,14 @@ const CEILING_HEIGHT = 124;
 const JUMP_FORCE = 800;
 const SPEED = 480;
 
-export const initGameScene = (k: KAPLAYCtx<{}, never>) => {
+export const initGameScene = (
+  k: KAPLAYCtx<{}, never>,
+  playerSprite?: string
+) => {
   k.setGravity(1600);
-
   // add a game object to screen
   const player = k.add([
-    k.sprite('bean'),
+    k.sprite(playerSprite ?? 'bean'),
     k.pos(80, FLOOR_HEIGHT),
     k.area(),
     k.body(),
@@ -40,7 +42,7 @@ export const initGameScene = (k: KAPLAYCtx<{}, never>) => {
     k.addKaboom(player.pos);
     k.shake(120);
     k.burp({ volume: 0.5 /* detune: 800 */ });
-    k.wait(0.3, () => k.go('menu-score', score));
+    k.wait(0.3, () => k.go('menu-score', score, playerSprite));
     k.addKaboom(player.pos);
     k.wait(0.1, () => k.addKaboom(player.pos));
     k.wait(0.2, () => k.addKaboom(player.pos));
@@ -55,6 +57,7 @@ export const initGameScene = (k: KAPLAYCtx<{}, never>) => {
   k.onUpdate(() => {
     score++;
     scoreLabel.text = String(score);
+    player.use(k.sprite(playerSprite ?? 'bean'));
   });
 };
 

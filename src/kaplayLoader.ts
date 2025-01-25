@@ -14,7 +14,10 @@ export const k = kaplay();
 
 // load assets
 k.loadSprite('bean', '/sprites/bean.png');
+k.loadSprite('monster-1', '/sprites/monster-1.png');
 k.loadSound('blip', '/audio/score.mp3');
 //TODO: import a font
 //TODO: import map, character, animation etc assets
 //TODO: import loadSpriteAtlas for ui and animation
+
+//TODO: load main background/map to be the main object with main pos reference to pass to all following children game objects
