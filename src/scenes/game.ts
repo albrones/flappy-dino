@@ -19,23 +19,29 @@ export const initGameScene = (
     k.body(),
   ]);
 
-  /* player action */
   function jump() {
-    // if (player.isGrounded()) {
     player.jump(JUMP_FORCE);
     k.play('blip');
     k.shake(3);
-    // }
+    const mark = k.add([
+      'mark',
+      k.text('('),
+      k.pos(player.pos),
+      k.scale(2),
+      k.anchor('center'),
+      k.move(LEFT, SPEED),
+      k.rotate(-30),
+    ]);
+    k.wait(1, () => {
+      k.destroy(mark);
+    });
   }
 
   generateWorld(k);
-
   // jump when user press space or click
   k.onKeyPress('space', jump);
   k.onClick(jump);
-
   spawnTrees(k);
-
   // menu if player collides with any game obj with tag "collider"
   player.onCollide('collider', () => {
     // go to "menu" scene and pass the score
@@ -123,6 +129,7 @@ function spawnTreeCeiling(k: KAPLAYCtx<{}, never>) {
     addLeaf(k, tree, i, true);
   }
   // wait a random amount of time to spawn next tree
+  k.wait(0.5);
   k.wait(k.rand(0.5, 1.5), () => spawnTreeCeiling(k));
 }
 
