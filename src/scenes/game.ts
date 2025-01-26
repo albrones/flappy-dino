@@ -1,6 +1,6 @@
 import { GameObj, KAPLAYCtx } from 'kaplay';
 
-const FLOOR_HEIGHT = 86;
+const FLOOR_HEIGHT = 62;
 const TREE_DEFAULT_SIZE = 50;
 const CEILING_HEIGHT = 124;
 const JUMP_FORCE = 800;
@@ -140,8 +140,7 @@ function spawnTrees(k: KAPLAYCtx<{}, never>) {
 
 function generateWorld(k: KAPLAYCtx<{}, never>) {
   const floor = k.add([
-    k.rect(k.width(), FLOOR_HEIGHT),
-    k.outline(4),
+    k.sprite('grass'),
     k.pos(0, k.height()),
     k.anchor('botleft'),
     k.area(),
@@ -149,6 +148,17 @@ function generateWorld(k: KAPLAYCtx<{}, never>) {
     k.color(127, 200, 255),
     'floor',
   ]);
+  const nbGrass = k.width() / floor.width;
+  for (let i = 1; i <= nbGrass; i++) {
+    floor.add([
+      k.sprite('grass'),
+      k.pos(floor.width * i, 0),
+      k.anchor('botleft'),
+      k.area(),
+      k.body({ isStatic: true }),
+      k.color(127, 200, 255),
+    ]);
+  }
 
   const ceiling = k.add([
     k.rect(k.width(), CEILING_HEIGHT),
