@@ -40,16 +40,19 @@ export const initMenuScoreScene = (
 
   function updateCharacter(right?: boolean) {
     if (right) {
-      playerSprite =
-        characterList[(currentCharacterIndex + 1) % characterList.length];
-      currentCharacterIndex = currentCharacterIndex + 1;
+      const newIndex =
+        currentCharacterIndex < characterList.length - 1
+          ? currentCharacterIndex + 1
+          : 0;
+      playerSprite = characterList[newIndex];
+      currentCharacterIndex = newIndex;
     } else if (!right) {
-      playerSprite =
-        characterList[(currentCharacterIndex - 1) % characterList.length];
-      currentCharacterIndex = currentCharacterIndex - 1;
-    } else {
-      playerSprite = characterList[0];
-      currentCharacterIndex = 0;
+      const newIndex =
+        currentCharacterIndex === 0
+          ? characterList.length - 1
+          : currentCharacterIndex - 1;
+      playerSprite = characterList[newIndex];
+      currentCharacterIndex = newIndex;
     }
     character.use(sprite(playerSprite));
   }
