@@ -8,7 +8,7 @@ export const initMenuScoreScene = (
 ) => {
   let currentCharacterIndex = characterList.indexOf(playerSprite);
 
-  function generateNewCharacter(k: KAPLAYCtx<{}, never>) {
+  function generateNewCharacter() {
     return k.make([
       k.sprite(playerSprite),
       k.pos(k.width() / 2, k.height() / 2 - 80),
@@ -18,9 +18,9 @@ export const initMenuScoreScene = (
     ]);
   }
 
-  function generateSelectButton(k: KAPLAYCtx<{}, never>, right?: boolean) {
+  function generateSelectButton(right?: boolean) {
     const sign = right ? 1 : -1;
-    const btn = k.add([
+    const btn = k.make([
       k.sprite('arrow'),
       k.area(),
       k.outline(4),
@@ -62,9 +62,28 @@ export const initMenuScoreScene = (
     characterName.use(k.text(playerSprite));
   }
 
-  const character = k.add(generateNewCharacter(k));
-  const selectNextCharacterBtn = generateSelectButton(k, true);
-  const selectPreviousCharacterBtn = generateSelectButton(k);
+  function generatePlayButton() {
+    const btn = k.make([
+      k.rect(80, 48),
+      k.area(),
+      k.outline(4),
+      k.pos(k.width() / 2, k.height() / 2 + 160),
+      k.scale(2),
+      k.anchor('center'),
+      k.color(127, 200, 255),
+      'button',
+    ]);
+    btn.add([k.pos(8, 2), k.scale(0.5), k.anchor('right'), k.text('PLAY')]);
+    btn.add([k.pos(12, 0), k.sprite('play'), k.scale(0.5), k.anchor('left')]);
+
+    btn.onClick(() => k.go('game', playerSprite));
+    k.onKeyPress('space', () => k.go('game', playerSprite));
+    return btn;
+  }
+
+  const character = k.add(generateNewCharacter());
+  const selectNextCharacterBtn = k.add(generateSelectButton(true));
+  const selectPreviousCharacterBtn = k.add(generateSelectButton());
   const characterName = k.add([
     k.text(playerSprite),
     k.pos(k.width() / 2, k.height() / 2 + 20),
@@ -81,22 +100,5 @@ export const initMenuScoreScene = (
     ]);
   }
 
-  const playButton = k.add([
-    k.rect(80, 48),
-    k.area(),
-    k.outline(4),
-    k.pos(k.width() / 2, k.height() / 2 + 160),
-    k.scale(2),
-    k.anchor('center'),
-    k.color(127, 200, 255),
-    'button',
-  ]);
-  k.add([
-    k.pos(k.width() / 2, k.height() / 2 + 160),
-    k.anchor('center'),
-    k.text('PLAY'),
-  ]);
-
-  playButton.onClick(() => k.go('game', playerSprite));
-  k.onKeyPress('space', () => k.go('game', playerSprite));
+  const playButton = k.add(generatePlayButton());
 };

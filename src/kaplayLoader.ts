@@ -49,6 +49,7 @@ k.loadSprite('kajam', assets.kajam.sprite);
 k.loadSprite('monster-1', '/sprites/monster-1.png');
 // load others sprites
 k.loadSprite('arrow', assets.arrow.sprite);
+k.loadSprite('play', assets.play.sprite);
 
 //TODO: unlock character with achivments ?
 export const characterList = [
@@ -87,6 +88,8 @@ export const characterList = [
 
 k.loadSound('blip', '/audio/score.mp3');
 //TODO: import a font
+// k.loadSprite('happy', assets.happy.sprite);
+// k.loadBitmapFont('happy', assets.happy.sprite, 6, 8);
 //TODO: import map, character, animation etc assets
 //TODO: import loadSpriteAtlas for ui and animation
 
