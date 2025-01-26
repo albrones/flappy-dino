@@ -1,5 +1,5 @@
 import { KAPLAYCtx } from 'kaplay';
-import { characterList } from '../main';
+import { characterList } from '../kaplayLoader';
 
 export const initMenuScoreScene = (
   k: KAPLAYCtx<{}, never>,
@@ -40,10 +40,12 @@ export const initMenuScoreScene = (
 
   function updateCharacter(right?: boolean) {
     if (right) {
-      playerSprite = characterList[(currentCharacterIndex + 1) % 2];
+      playerSprite =
+        characterList[(currentCharacterIndex + 1) % characterList.length];
       currentCharacterIndex = currentCharacterIndex + 1;
     } else if (!right) {
-      playerSprite = characterList[(currentCharacterIndex - 1) % 2];
+      playerSprite =
+        characterList[(currentCharacterIndex - 1) % characterList.length];
       currentCharacterIndex = currentCharacterIndex - 1;
     } else {
       playerSprite = characterList[0];

@@ -15,6 +15,8 @@ export const k = kaplay();
 // load assets
 k.loadSprite('bean', '/sprites/bean.png');
 k.loadSprite('monster-1', '/sprites/monster-1.png');
+export const characterList = ['bean', 'monster-1'];
+
 k.loadSound('blip', '/audio/score.mp3');
 //TODO: import a font
 //TODO: import map, character, animation etc assets
