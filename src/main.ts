@@ -11,4 +11,6 @@ k.scene('menu-score', (score, playerSprite) => {
 k.scene('game', (playerSprite) => {
   initGameScene(k, playerSprite);
 });
-k.go('menu-score', 0, playerSprite);
+k.onLoad(() => {
+  k.go('menu-score', 0, playerSprite);
+});
