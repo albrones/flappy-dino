@@ -34,6 +34,7 @@ export const initMenuScoreScene = (
     btn.add([k.anchor('center'), k.text(right ? '>' : '<')]);
     btn.onClick(() => {
       updateCharacter(right);
+      updateCharacterName();
     });
     return btn;
   }
@@ -54,12 +55,22 @@ export const initMenuScoreScene = (
       playerSprite = characterList[newIndex];
       currentCharacterIndex = newIndex;
     }
-    character.use(sprite(playerSprite));
+    character.use(k.sprite(playerSprite));
+  }
+
+  function updateCharacterName() {
+    characterName.use(k.text(playerSprite));
   }
 
   const character = k.add(generateNewCharacter(k));
   const selectNextCharacterBtn = generateSelectButton(k, true);
   const selectPreviousCharacterBtn = generateSelectButton(k);
+  const characterName = k.add([
+    k.text(playerSprite),
+    k.pos(k.width() / 2, k.height() / 2 + 20),
+    k.scale(2),
+    k.anchor('center'),
+  ]);
 
   if (score) {
     const scoreText = k.add([
