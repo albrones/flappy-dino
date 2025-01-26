@@ -21,17 +21,17 @@ export const initMenuScoreScene = (
   function generateSelectButton(k: KAPLAYCtx<{}, never>, right?: boolean) {
     const sign = right ? 1 : -1;
     const btn = k.add([
-      k.circle(24),
+      k.sprite('arrow'),
       k.area(),
       k.outline(4),
-      k.pos(k.width() / 2 + 120 * sign, k.height() / 2 - 80),
-      k.scale(2),
+      k.pos(k.width() / 2 + 160 * sign, k.height() / 2 - 80),
+      k.scale(1.5),
       k.anchor('center'),
+      k.rotate(right ? 0 : 180),
       k.color(127, 200, 255),
       'button',
       'select',
     ]);
-    btn.add([k.anchor('center'), k.text(right ? '>' : '<')]);
     btn.onClick(() => {
       updateCharacter(right);
       updateCharacterName();

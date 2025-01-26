@@ -13,7 +13,7 @@ export const k = kaplay();
   }
    */
 
-// load assets
+// load character sprites
 k.loadSprite('bean', assets.bean.sprite);
 k.loadSprite('bag', assets.bag.sprite);
 k.loadSprite('bobo', assets.bobo.sprite);
@@ -47,6 +47,8 @@ k.loadSprite('dino', assets.dino.sprite);
 k.loadSprite('dracula', assets.dracula.sprite);
 k.loadSprite('kajam', assets.kajam.sprite);
 k.loadSprite('monster-1', '/sprites/monster-1.png');
+// load others sprites
+k.loadSprite('arrow', assets.arrow.sprite);
 
 //TODO: unlock character with achivments ?
 export const characterList = [
