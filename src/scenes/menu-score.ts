@@ -81,6 +81,7 @@ export const initMenuScoreScene = (
     return btn;
   }
 
+  /* MAIN */
   const character = k.add(generateNewCharacter());
   const selectNextCharacterBtn = k.add(generateSelectButton(true));
   const selectPreviousCharacterBtn = k.add(generateSelectButton());

@@ -51,6 +51,7 @@ k.loadSprite('monster-1', '/sprites/monster-1.png');
 k.loadSprite('arrow', assets.arrow.sprite);
 k.loadSprite('play', assets.play.sprite);
 k.loadSprite('grass', assets.grass.sprite);
+k.loadSprite('cloud', assets.cloud.sprite);
 
 //TODO: unlock character with achivments ?
 export const characterList = [
