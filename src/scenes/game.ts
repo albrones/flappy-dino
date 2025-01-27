@@ -150,7 +150,7 @@ function generateWorld(k: KAPLAYCtx<{}, never>) {
   ]);
   const nbGrass = k.width() / floor.width;
   for (let i = 1; i <= nbGrass; i++) {
-    floor.add([
+    const block = k.make([
       k.sprite('grass'),
       k.pos(floor.width * i, 0),
       k.anchor('botleft'),
@@ -158,6 +158,8 @@ function generateWorld(k: KAPLAYCtx<{}, never>) {
       k.body({ isStatic: true }),
       k.color(127, 200, 255),
     ]);
+    block.flipX = Boolean(Math.round(Math.random()));
+    floor.add(block);
   }
 
   const ceiling = k.add([
