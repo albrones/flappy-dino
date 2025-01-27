@@ -1,5 +1,5 @@
 import { KAPLAYCtx } from 'kaplay';
-import { characterList } from '../kaplayLoader';
+import { characterList, palette } from '../kaplayLoader';
 
 export const initMenuScoreScene = (
   k: KAPLAYCtx<{}, never>,
@@ -28,7 +28,7 @@ export const initMenuScoreScene = (
       k.scale(1.5),
       k.anchor('center'),
       k.rotate(right ? 0 : 180),
-      k.color(127, 200, 255),
+      k.color(palette.MediumSlateBlue),
       'button',
       'select',
     ]);
@@ -70,7 +70,7 @@ export const initMenuScoreScene = (
       k.pos(k.width() / 2, k.height() / 2 + 160),
       k.scale(2),
       k.anchor('center'),
-      k.color(127, 200, 255),
+      k.color(palette.MediumSlateBlue),
       'button',
     ]);
     btn.add([k.pos(8, 2), k.scale(0.5), k.anchor('right'), k.text('PLAY')]);

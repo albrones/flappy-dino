@@ -1,4 +1,5 @@
 import { GameObj, KAPLAYCtx } from 'kaplay';
+import { palette } from '../kaplayLoader';
 
 const FLOOR_HEIGHT = 62;
 const TREE_DEFAULT_SIZE = 50;
@@ -41,7 +42,7 @@ export const initGameScene = (
       k.area(),
       k.rotate(rotation),
       k.outline(4),
-      k.color(0, 180, 0),
+      k.color(palette.OceanGreen),
       'leaf',
       'collider',
     ]);
@@ -54,7 +55,7 @@ export const initGameScene = (
       k.outline(4),
       k.pos(k.width(), k.height() - FLOOR_HEIGHT),
       k.anchor('botleft'),
-      k.color(50, 50, 50),
+      k.color(palette.VinRouge),
       k.move(LEFT, SPEED),
       'tree',
       'collider',
@@ -71,12 +72,13 @@ export const initGameScene = (
     const width = k.width();
     const height = k.height();
     const sizeScaler = k.rand(1, 2.3);
+    const colors = [palette.CottonCandy, palette.Illusion, palette.Twilight];
     const cloud = k.make([
       k.sprite('cloud'),
       k.area(),
       k.pos(width, k.rand(CEILING_HEIGHT, height / 3)),
       k.anchor('topleft'),
-      k.color(255, 180, 255),
+      k.color(colors[Math.floor(Math.random() * colors.length)]),
       k.scale(sizeScaler),
       k.move(LEFT, (SPEED * sizeScaler) / 2),
       'cloud',
@@ -99,7 +101,7 @@ export const initGameScene = (
       k.anchor('botleft'),
       k.area(),
       k.body({ isStatic: true }),
-      k.color(127, 200, 255),
+      k.color(palette.LightSkyBlue),
       'floor',
     ]);
     const nbGrass = k.width() / floor.width;
@@ -110,7 +112,7 @@ export const initGameScene = (
         k.anchor('botleft'),
         k.area(),
         k.body({ isStatic: true }),
-        k.color(127, 200, 255),
+        k.color(palette.LightSkyBlue),
       ]);
       block.flipX = Boolean(Math.round(Math.random()));
       floor.add(block);
@@ -123,7 +125,7 @@ export const initGameScene = (
       k.anchor('topleft'),
       k.area(),
       k.body({ isStatic: true }),
-      k.color(127, 200, 255),
+      k.color('#8465ec'),
       'ceiling',
     ]);
   }

@@ -2,6 +2,41 @@ import { assets } from '@kaplayjs/crew';
 import kaplay from 'kaplay';
 
 export const scale = 2;
+export const palette = {
+  //named using https://www.color-blindness.com/color-name-hue/
+  OceanGreen: '#5ba675',
+  Mantis: '#6bc96c',
+  Conifer: '#abdd64',
+  Drover: '#fcef8d',
+  MacaroniAndCheese: '#ffb879',
+  BurntSienna: '#ea6262',
+  Mandy: '#cc425e',
+  Lipstick: '#a32858',
+  DarkPurple: '#751756',
+  Jagger: '#390947',
+  Pompadour: '#611851',
+  Flirt: '#873555',
+  VinRouge: '#a6555f',
+  Contessa: '#c97373',
+  MandysPink: '#f2ae99',
+  CottonCandy: '#ffc3f2',
+  Illusion: '#ee8fcb',
+  Hopebush: '#d46eb3',
+  Cadillac: '#873e84',
+  Blackcurrant: '#1f102a',
+  HotPurple: '#4a3052',
+  Affair: '#7b5480',
+  Bouquet: '#a6859f',
+  Twilight: '#d9bdc8',
+  White: '#ffffff',
+  ColumbiaBlue: '#aee2ff',
+  LightSkyBlue: '#8db7ff',
+  LightSlateBlue: '#6d80fa',
+  MediumSlateBlue: '#8465ec',
+  DeepLilac: '#834dc4',
+  VividViolet: '#7d2da0',
+  PersianIndigo: '#4e187c',
+};
 export const k = kaplay();
 /* 
   {
