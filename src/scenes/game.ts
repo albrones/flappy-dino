@@ -64,6 +64,9 @@ export const initGameScene = (
     for (let i = 0; i <= nbLeaf; i++) {
       addLeaf(k, tree, i);
     }
+    tree.onCollide('limit', () => {
+      k.destroy(tree);
+    });
     // wait a random amount of time to spawn next tree
     k.wait(k.rand(0.5, 1.5), () => spawnTreeFloor(k));
   }
@@ -85,6 +88,9 @@ export const initGameScene = (
       'collider',
     ]);
     cloud.flipX = Boolean(Math.round(Math.random()));
+    cloud.onCollide('limit', () => {
+      k.destroy(cloud);
+    });
     k.add(cloud);
     k.wait(k.rand(0.1, 1.6), () => spawnClouds(k));
   }
@@ -137,6 +143,12 @@ export const initGameScene = (
     k.pos(80, FLOOR_HEIGHT),
     k.area(),
     k.body(),
+  ]);
+  const worldLimit = k.add([
+    k.rect(1, k.height()),
+    k.pos(-100, 0),
+    k.area(),
+    'limit',
   ]);
 
   generateWorld(k);
