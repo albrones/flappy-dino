@@ -6,7 +6,7 @@ export const initGameScene = (
   playerSprite: string
 ) => {
   const SCALING_RATIO = 1.67;
-  const FLOOR_HEIGHT = 64;
+  const FLOOR_HEIGHT = 52;
   const SKY_LIMIT = 4;
   const JUMP_FORCE = 800;
   const SPEED = 480;
@@ -106,7 +106,7 @@ export const initGameScene = (
   function generateWorld(k: KAPLAYCtx<{}, never>) {
     const floor = k.add([
       k.sprite('grass'),
-      k.pos(0, k.height()),
+      k.pos(0, k.height() + 12),
       k.anchor('botleft'),
       k.area(),
       k.body({ isStatic: true }),
@@ -143,7 +143,7 @@ export const initGameScene = (
   k.setGravity(1600);
   const player = k.add([
     k.sprite(playerSprite),
-    k.pos(80, FLOOR_HEIGHT),
+    k.pos(80, 100),
     k.area(),
     k.body(),
   ]);
