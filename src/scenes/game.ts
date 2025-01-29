@@ -1,20 +1,20 @@
 import { GameObj, KAPLAYCtx } from 'kaplay';
 import { PALETTE } from '../kaplayLoader';
 
-const FLOOR_HEIGHT = 62;
-const TREE_DEFAULT_SIZE = 50;
-const CEILING_HEIGHT = 3;
-const JUMP_FORCE = 800;
-const SPEED = 480;
-
 export const initGameScene = (
   k: KAPLAYCtx<{}, never>,
   playerSprite: string
 ) => {
+  const SCALING_RATIO = 1.67;
+  const FLOOR_HEIGHT = 64;
+  const SKY_LIMIT = 4;
+  const JUMP_FORCE = 800;
+  const SPEED = 480;
+
   function jump(player: GameObj) {
     player.jump(JUMP_FORCE);
     k.play('blip');
-    k.shake(3);
+    // k.burp({ volume: 0.2 /* detune: 800 */ });
     const mark = k.add([
       'mark',
       k.text('('),
@@ -48,15 +48,17 @@ export const initGameScene = (
     ]);
   }
 
-  function spawnTreeFloor(k: KAPLAYCtx<{}, never>) {
+  function spawnTrees(k: KAPLAYCtx<{}, never>) {
+    const minSize = FLOOR_HEIGHT / SCALING_RATIO;
+    const maxSize = (minSize * 3) / SCALING_RATIO;
     let tree = k.add([
-      k.rect(TREE_DEFAULT_SIZE, k.rand(32, 96)),
+      k.rect(k.rand(minSize, maxSize), k.rand(minSize, maxSize / 2)),
       k.area(),
       k.outline(4),
-      k.pos(k.width(), k.height() - FLOOR_HEIGHT),
+      k.pos(k.width() + 50, k.height() - FLOOR_HEIGHT),
       k.anchor('botleft'),
       k.color(PALETTE.VinRouge),
-      k.move(LEFT, SPEED),
+      k.move(k.LEFT, SPEED),
       'tree',
       'collider',
     ]);
@@ -67,15 +69,15 @@ export const initGameScene = (
     tree.onCollide('limit', () => {
       k.destroy(tree);
     });
-    // wait a random amount of time to spawn next tree
-    k.wait(k.rand(0.5, 1.5), () => spawnTreeFloor(k));
+    k.wait(k.rand(0.3, 1.7), () => spawnTrees(k));
   }
 
   function spawnClouds(k: KAPLAYCtx<{}, never>) {
-    const width = k.width();
-    const height = k.height();
-    const sizeScaler = k.rand(1, 2.3);
+    const skyRange = k.height() / 2 / SCALING_RATIO;
+    const sizeScaler = k.rand(0.7, SCALING_RATIO);
     const colors = [PALETTE.CottonCandy, PALETTE.Illusion, PALETTE.Twilight];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    const isFlipped = Boolean(Math.round(Math.random()));
     const cloud = k.make([
       k.sprite('cloud'),
       k.area(),
@@ -88,7 +90,7 @@ export const initGameScene = (
       'cloud',
       'collider',
     ]);
-    cloud.flipX = Boolean(Math.round(Math.random()));
+    cloud.flipX = isFlipped;
     cloud.onCollide('limit', () => {
       k.destroy(cloud);
     });
@@ -96,8 +98,8 @@ export const initGameScene = (
     k.wait(k.rand(0.1, 1.6), () => spawnClouds(k));
   }
 
-  function spawnTrees(k: KAPLAYCtx<{}, never>) {
-    spawnTreeFloor(k);
+  function spawnColliders(k: KAPLAYCtx<{}, never>) {
+    spawnTrees(k);
     spawnClouds(k);
   }
 
@@ -111,12 +113,12 @@ export const initGameScene = (
       k.color(PALETTE.LightSkyBlue),
       'floor',
     ]);
-    const nbGrass = k.width() / floor.width;
-    for (let i = 1; i <= nbGrass; i++) {
+    const nbBlock = k.width() / floor.width;
+    for (let i = 1; i <= nbBlock + 1; i++) {
       const block = k.make([
         k.sprite('grass'),
         k.pos(floor.width * i, 0),
-        k.anchor('botleft'),
+        k.anchor('botright'),
         k.area(),
         k.body({ isStatic: true }),
         k.color(PALETTE.LightSkyBlue),
@@ -125,20 +127,20 @@ export const initGameScene = (
       floor.add(block);
     }
 
-    const ceiling = k.add([
-      k.rect(k.width(), CEILING_HEIGHT),
+    const sky = k.add([
+      k.rect(k.width(), SKY_LIMIT),
       k.outline(4),
       k.pos(0, 0),
       k.anchor('topleft'),
       k.area(),
       k.body({ isStatic: true }),
       k.color(PALETTE.LightSlateBlue),
-      'ceiling',
+      'sky',
     ]);
   }
+
   /* MAIN */
   k.setGravity(1600);
-  // add a game object to screen
   const player = k.add([
     k.sprite(playerSprite),
     k.pos(80, FLOOR_HEIGHT),
@@ -153,15 +155,13 @@ export const initGameScene = (
   ]);
 
   generateWorld(k);
-  // jump when user press space or click
   k.onKeyPress('space', () => jump(player));
   k.onClick(() => jump(player));
-  spawnTrees(k);
+  spawnColliders(k);
   // menu if player collides with any game obj with tag "collider"
   player.onCollide('collider', () => {
-    // go to "menu" scene and pass the score
     k.addKaboom(player.pos);
-    k.shake(120);
+    k.shake(60);
     k.burp({ volume: 0.5 /* detune: 800 */ });
     k.wait(0.3, () => k.go('menu-score', score, playerSprite));
     k.addKaboom(player.pos);
@@ -170,11 +170,9 @@ export const initGameScene = (
     k.wait(0.3, () => k.addKaboom(player.pos));
   });
 
-  // keep track of score
   let score: number = 0;
   const scoreLabel = k.add([k.text(String(score)), k.pos(24, 24)]);
 
-  // increment score every frame
   k.onUpdate(() => {
     score++;
     scoreLabel.text = String(score);
