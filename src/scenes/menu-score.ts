@@ -1,5 +1,5 @@
 import { KAPLAYCtx } from 'kaplay';
-import { characterList, PALETTE } from '../kaplayLoader';
+import { characterList, PALETTE, SCALE } from '../kaplayLoader';
 
 export const initMenuScoreScene = (
   k: KAPLAYCtx<{}, never>,
@@ -12,7 +12,7 @@ export const initMenuScoreScene = (
     return k.make([
       k.sprite(playerSprite),
       k.pos(k.width() / 2, k.height() / 2 - 80),
-      k.scale(2),
+      k.scale(SCALE),
       k.anchor('center'),
       'player',
     ]);
@@ -68,7 +68,7 @@ export const initMenuScoreScene = (
       k.area(),
       k.outline(4),
       k.pos(k.width() / 2, k.height() / 2 + 160),
-      k.scale(2),
+      k.scale(SCALE),
       k.anchor('center'),
       k.color(PALETTE.MediumSlateBlue),
       'button',
@@ -88,7 +88,7 @@ export const initMenuScoreScene = (
   const characterName = k.add([
     k.text(playerSprite),
     k.pos(k.width() / 2, k.height() / 2 + 20),
-    k.scale(2),
+    k.scale(SCALE),
     k.anchor('center'),
   ]);
 
@@ -96,7 +96,7 @@ export const initMenuScoreScene = (
     const scoreText = k.add([
       k.text(score),
       k.pos(k.width() / 2, k.height() / 2 + 80),
-      k.scale(2),
+      k.scale(SCALE),
       k.anchor('center'),
     ]);
   }

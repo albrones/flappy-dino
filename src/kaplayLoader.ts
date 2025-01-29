@@ -46,16 +46,6 @@ export const PALETTE = {
   PersianIndigo: '#4e187c',
 };
 
-/* 
-  {
-  width: 640 * scale,
-  height: 360 * scale,
-  scale,
-  letterbox: true, // responsive with aspect-ratio respeect
-  global: false
-  }
-   */
-
 // load character sprites
 k.loadSprite('bean', assets.bean.sprite);
 k.loadSprite('bag', assets.bag.sprite);

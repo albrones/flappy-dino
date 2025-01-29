@@ -1,5 +1,5 @@
 import { GameObj, KAPLAYCtx } from 'kaplay';
-import { PALETTE } from '../kaplayLoader';
+import { PALETTE, SCALE } from '../kaplayLoader';
 
 export const initGameScene = (
   k: KAPLAYCtx<{}, never>,
@@ -19,7 +19,7 @@ export const initGameScene = (
       'mark',
       k.text('('),
       k.pos(player.pos),
-      k.scale(2),
+      k.scale(SCALE),
       k.anchor('center'),
       k.move(k.LEFT, SPEED),
       k.rotate(-30),
