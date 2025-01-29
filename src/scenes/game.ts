@@ -1,5 +1,5 @@
 import { GameObj, KAPLAYCtx } from 'kaplay';
-import { palette } from '../kaplayLoader';
+import { PALETTE } from '../kaplayLoader';
 
 const FLOOR_HEIGHT = 62;
 const TREE_DEFAULT_SIZE = 50;
@@ -21,7 +21,7 @@ export const initGameScene = (
       k.pos(player.pos),
       k.scale(2),
       k.anchor('center'),
-      k.move(LEFT, SPEED),
+      k.move(k.LEFT, SPEED),
       k.rotate(-30),
     ]);
     k.wait(1, () => {
@@ -42,7 +42,7 @@ export const initGameScene = (
       k.area(),
       k.rotate(rotation),
       k.outline(4),
-      k.color(palette.OceanGreen),
+      k.color(PALETTE.OceanGreen),
       'leaf',
       'collider',
     ]);
@@ -55,7 +55,7 @@ export const initGameScene = (
       k.outline(4),
       k.pos(k.width(), k.height() - FLOOR_HEIGHT),
       k.anchor('botleft'),
-      k.color(palette.VinRouge),
+      k.color(PALETTE.VinRouge),
       k.move(LEFT, SPEED),
       'tree',
       'collider',
@@ -75,15 +75,16 @@ export const initGameScene = (
     const width = k.width();
     const height = k.height();
     const sizeScaler = k.rand(1, 2.3);
-    const colors = [palette.CottonCandy, palette.Illusion, palette.Twilight];
+    const colors = [PALETTE.CottonCandy, PALETTE.Illusion, PALETTE.Twilight];
     const cloud = k.make([
       k.sprite('cloud'),
       k.area(),
-      k.pos(width, k.rand(CEILING_HEIGHT, height / 3)),
-      k.anchor('topleft'),
-      k.color(colors[Math.floor(Math.random() * colors.length)]),
+      k.pos(k.width() + 50, k.rand(SKY_LIMIT, skyRange)),
+      k.anchor('center'),
+      k.rotate(k.rand(-7, 7)),
+      k.color(randomColor),
       k.scale(sizeScaler),
-      k.move(LEFT, (SPEED * sizeScaler) / 2),
+      k.move(k.LEFT, (SPEED * sizeScaler) / 2),
       'cloud',
       'collider',
     ]);
@@ -107,7 +108,7 @@ export const initGameScene = (
       k.anchor('botleft'),
       k.area(),
       k.body({ isStatic: true }),
-      k.color(palette.LightSkyBlue),
+      k.color(PALETTE.LightSkyBlue),
       'floor',
     ]);
     const nbGrass = k.width() / floor.width;
@@ -118,7 +119,7 @@ export const initGameScene = (
         k.anchor('botleft'),
         k.area(),
         k.body({ isStatic: true }),
-        k.color(palette.LightSkyBlue),
+        k.color(PALETTE.LightSkyBlue),
       ]);
       block.flipX = Boolean(Math.round(Math.random()));
       floor.add(block);
@@ -131,7 +132,7 @@ export const initGameScene = (
       k.anchor('topleft'),
       k.area(),
       k.body({ isStatic: true }),
-      k.color('#8465ec'),
+      k.color(PALETTE.LightSlateBlue),
       'ceiling',
     ]);
   }

@@ -1,8 +1,16 @@
 import { assets } from '@kaplayjs/crew';
 import kaplay from 'kaplay';
 
-export const scale = 2;
-export const palette = {
+export const SCALE = 2;
+export const k = kaplay({
+  // width: 640 * SCALE,
+  // height: 360 * SCALE,
+  // scale: SCALE,
+  // letterbox: true, // responsive with aspect-ratio respeect
+  global: false,
+});
+
+export const PALETTE = {
   //named using https://www.color-blindness.com/color-name-hue/
   OceanGreen: '#5ba675',
   Mantis: '#6bc96c',
@@ -37,7 +45,7 @@ export const palette = {
   VividViolet: '#7d2da0',
   PersianIndigo: '#4e187c',
 };
-export const k = kaplay();
+
 /* 
   {
   width: 640 * scale,

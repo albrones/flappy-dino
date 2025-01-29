@@ -4,7 +4,7 @@ import { initMenuScoreScene } from './scenes/menu-score';
 
 let playerSprite = k.choose(characterList);
 //create main parent
-k.add([pos(0, 0)]);
+k.add([k.pos(0, 0)]);
 k.scene('menu-score', (score, playerSprite) => {
   initMenuScoreScene(k, score, playerSprite);
 });
