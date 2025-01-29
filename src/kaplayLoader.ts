@@ -46,6 +46,8 @@ export const PALETTE = {
   PersianIndigo: '#4e187c',
 };
 
+export const START_VOLUME = k.getVolume();
+
 // load character sprites
 k.loadSprite('bean', assets.bean.sprite);
 k.loadSprite('bag', assets.bag.sprite);
@@ -85,6 +87,7 @@ k.loadSprite('arrow', assets.arrow.sprite);
 k.loadSprite('play', assets.play.sprite);
 k.loadSprite('grass', assets.grass.sprite);
 k.loadSprite('cloud', assets.cloud.sprite);
+k.loadSprite('sounds', assets.sounds.sprite);
 
 //TODO: unlock character with achivments ?
 export const characterList = [

@@ -1,5 +1,5 @@
 import { GameObj, KAPLAYCtx } from 'kaplay';
-import { PALETTE, SCALE } from '../kaplayLoader';
+import { PALETTE, SCALE, START_VOLUME } from '../kaplayLoader';
 
 export const initGameScene = (
   k: KAPLAYCtx<{}, never>,
@@ -172,6 +172,23 @@ export const initGameScene = (
 
   let score: number = 0;
   const scoreLabel = k.add([k.text(String(score)), k.pos(24, 24)]);
+  const currentVolume = k.getVolume();
+  const muteButton = k.add([
+    k.sprite('sounds'),
+    k.pos(k.width() - 60, 24),
+    k.area(),
+    k.opacity(currentVolume ? 1 : 0.5),
+    'mute',
+  ]);
+  k.onClick('mute', () => {
+    if (currentVolume) {
+      k.setVolume(0);
+      muteButton.opacity = 0.5;
+    } else {
+      k.setVolume(START_VOLUME);
+      muteButton.opacity = 1;
+    }
+  });
 
   k.onUpdate(() => {
     score++;
