@@ -82,6 +82,7 @@ export const initMenuScoreScene = (
   }
 
   /* MAIN */
+  k.setBackground(k.Color.fromHex(PALETTE.LightSkyBlue));
   const character = k.add(generateNewCharacter());
   const selectNextCharacterBtn = k.add(generateSelectButton(true));
   const selectPreviousCharacterBtn = k.add(generateSelectButton());

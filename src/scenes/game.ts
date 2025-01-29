@@ -7,7 +7,7 @@ export const initGameScene = (
 ) => {
   const SCALING_RATIO = 1.67;
   const FLOOR_HEIGHT = 52;
-  const SKY_LIMIT = 4;
+  const SKY_LIMIT = 1;
   const JUMP_FORCE = 800;
   const SPEED = 480;
 
@@ -129,12 +129,9 @@ export const initGameScene = (
 
     const sky = k.add([
       k.rect(k.width(), SKY_LIMIT),
-      k.outline(4),
-      k.pos(0, 0),
-      k.anchor('topleft'),
+      k.pos(0, -1),
       k.area(),
       k.body({ isStatic: true }),
-      k.color(PALETTE.LightSlateBlue),
       'sky',
     ]);
   }
