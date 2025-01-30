@@ -1,12 +1,12 @@
 import { KAPLAYCtx } from 'kaplay';
-import { characterList, PALETTE, SCALE } from '../kaplayLoader';
+import { characters, PALETTE, SCALE } from '../kaplayLoader';
 
 export const initMenuScoreScene = (
   k: KAPLAYCtx<{}, never>,
   score: string,
   playerSprite: string
 ) => {
-  let currentCharacterIndex = characterList.indexOf(playerSprite);
+  let currentCharacterIndex = characters.indexOf(playerSprite);
 
   function generateNewCharacter() {
     return k.make([
@@ -42,17 +42,17 @@ export const initMenuScoreScene = (
   function updateCharacter(right?: boolean) {
     if (right) {
       const newIndex =
-        currentCharacterIndex < characterList.length - 1
+        currentCharacterIndex < characters.length - 1
           ? currentCharacterIndex + 1
           : 0;
-      playerSprite = characterList[newIndex];
+      playerSprite = characters[newIndex];
       currentCharacterIndex = newIndex;
     } else if (!right) {
       const newIndex =
         currentCharacterIndex === 0
-          ? characterList.length - 1
+          ? characters.length - 1
           : currentCharacterIndex - 1;
-      playerSprite = characterList[newIndex];
+      playerSprite = characters[newIndex];
       currentCharacterIndex = newIndex;
     }
     character.use(k.sprite(playerSprite));

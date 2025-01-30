@@ -45,6 +45,7 @@ export const initGameScene = (
       k.color(PALETTE.OceanGreen),
       'leaf',
       'collider',
+      'moving-object',
     ]);
   }
 
@@ -61,14 +62,12 @@ export const initGameScene = (
       k.move(k.LEFT, SPEED),
       'tree',
       'collider',
+      'moving-object',
     ]);
     const nbLeaf = k.rand(2, 5);
     for (let i = 0; i <= nbLeaf; i++) {
       addLeaf(k, tree, i);
     }
-    tree.onCollide('limit', () => {
-      k.destroy(tree);
-    });
     k.wait(k.rand(0.3, 1.7), () => spawnTrees(k));
   }
 
@@ -88,19 +87,41 @@ export const initGameScene = (
       k.scale(sizeScaler),
       k.move(k.LEFT, (SPEED * sizeScaler) / 2),
       'cloud',
-      'collider',
+      'moving-object',
     ]);
     cloud.flipX = isFlipped;
-    cloud.onCollide('limit', () => {
-      k.destroy(cloud);
-    });
     k.add(cloud);
-    k.wait(k.rand(0.1, 1.6), () => spawnClouds(k));
+    k.wait(k.rand(0.1, 1), () => spawnClouds(k));
   }
 
-  function spawnColliders(k: KAPLAYCtx<{}, never>) {
+  function spawnEnemies(k: KAPLAYCtx<{}, never>) {
+    const skyRange = k.height() / 2 / SCALING_RATIO;
+    const sizeScaler = k.rand(0.7, 1);
+    const colors = [PALETTE.CottonCandy, PALETTE.Illusion, PALETTE.Twilight];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    const enemie = k.make([
+      k.sprite('goldfly'),
+      k.rotate(180),
+      k.area(),
+      k.pos(k.width() + 50, k.rand(SKY_LIMIT + 50, skyRange - 50)),
+      k.anchor('center'),
+      k.rotate(k.rand(-7, 7)),
+      k.color(randomColor),
+      k.scale(sizeScaler),
+      k.move(k.LEFT, (SPEED * sizeScaler) / 2),
+      'enemie',
+      'collider',
+      'moving-object',
+    ]);
+    enemie.flipX = true;
+    k.add(enemie);
+    k.wait(k.rand(1, 2.6), () => spawnEnemies(k));
+  }
+
+  function spawnGameObjects(k: KAPLAYCtx<{}, never>) {
     spawnTrees(k);
     spawnClouds(k);
+    spawnEnemies(k);
   }
 
   function generateWorld(k: KAPLAYCtx<{}, never>) {
@@ -154,7 +175,7 @@ export const initGameScene = (
   generateWorld(k);
   k.onKeyPress('space', () => jump(player));
   k.onClick(() => jump(player));
-  spawnColliders(k);
+  spawnGameObjects(k);
   // menu if player collides with any game obj with tag "collider"
   player.onCollide('collider', () => {
     k.addKaboom(player.pos);
@@ -165,6 +186,10 @@ export const initGameScene = (
     k.wait(0.1, () => k.addKaboom(player.pos));
     k.wait(0.2, () => k.addKaboom(player.pos));
     k.wait(0.3, () => k.addKaboom(player.pos));
+  });
+
+  k.onCollide('limit', 'moving-object', (_, obj) => {
+    k.destroy(obj);
   });
 
   let score: number = 0;

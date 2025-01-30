@@ -84,7 +84,7 @@ k.loadSprite('kajam', assets.kajam.sprite);
 k.loadSprite('monster-1', '/sprites/monster-1.png');
 
 //TODO: unlock character with achivments ?
-export const characterList = [
+export const characters = [
   'bean',
   'bag',
   'bobo',
@@ -97,7 +97,6 @@ export const characterList = [
   'burpman',
   'kat',
   'lamp',
-  'goldfly',
   'onion',
   'marroc',
   'sukomi',
@@ -117,6 +116,8 @@ export const characterList = [
   'dracula',
   'monster-1',
 ];
+
+export const enemies = ['goldfly'];
 
 // load others sprites
 k.loadSprite('arrow', assets.arrow.sprite);

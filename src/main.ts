@@ -1,9 +1,9 @@
 import { initUiMenu } from './components/uiMenu';
-import { characterList, k } from './kaplayLoader';
+import { characters, k } from './kaplayLoader';
 import { initGameScene } from './scenes/game';
 import { initMenuScoreScene } from './scenes/menu-score';
 
-let playerSprite = k.choose(characterList);
+let playerSprite = k.choose(characters);
 k.scene('menu-score', (score, playerSprite) => {
   initUiMenu(k);
   initMenuScoreScene(k, score, playerSprite);
