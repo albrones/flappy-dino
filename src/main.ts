@@ -1,15 +1,15 @@
-import { initMuteButton } from './components/muteButton';
+import { initUiMenu } from './components/uiMenu';
 import { characterList, k } from './kaplayLoader';
 import { initGameScene } from './scenes/game';
 import { initMenuScoreScene } from './scenes/menu-score';
 
 let playerSprite = k.choose(characterList);
 k.scene('menu-score', (score, playerSprite) => {
-  initMuteButton(k);
+  initUiMenu(k);
   initMenuScoreScene(k, score, playerSprite);
 });
 k.scene('game', (playerSprite) => {
-  initMuteButton(k);
+  initUiMenu(k);
   initGameScene(k, playerSprite);
 });
 k.onLoad(() => {

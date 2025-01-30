@@ -82,12 +82,6 @@ k.loadSprite('dino', assets.dino.sprite);
 k.loadSprite('dracula', assets.dracula.sprite);
 k.loadSprite('kajam', assets.kajam.sprite);
 k.loadSprite('monster-1', '/sprites/monster-1.png');
-// load others sprites
-k.loadSprite('arrow', assets.arrow.sprite);
-k.loadSprite('play', assets.play.sprite);
-k.loadSprite('grass', assets.grass.sprite);
-k.loadSprite('cloud', assets.cloud.sprite);
-k.loadSprite('sounds', assets.sounds.sprite);
 
 //TODO: unlock character with achivments ?
 export const characterList = [
@@ -124,7 +118,18 @@ export const characterList = [
   'monster-1',
 ];
 
+// load others sprites
+k.loadSprite('arrow', assets.arrow.sprite);
+k.loadSprite('play', assets.play.sprite);
+k.loadSprite('grass', assets.grass.sprite);
+k.loadSprite('cloud', assets.cloud.sprite);
+k.loadSprite('sounds', assets.sounds.sprite);
+k.loadSprite('config', assets.config.sprite);
+k.loadSprite('plus', assets.plus.sprite);
+
+//load sounds
 k.loadSound('blip', '/audio/score.mp3');
+
 //TODO: import a font
 // k.loadSprite('happy', assets.happy.sprite);
 // k.loadBitmapFont('happy', assets.happy.sprite, 6, 8);
