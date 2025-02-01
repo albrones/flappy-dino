@@ -12,6 +12,7 @@ export const initGameScene = (
   const JUMP_FORCE = 800;
   const DEFAULT_SPEED = 432;
   const SPEED = DEFAULT_SPEED + 48 * level;
+  let countdown = 3;
 
   function jump(player: GameObj) {
     player.jump(JUMP_FORCE);
@@ -121,9 +122,9 @@ export const initGameScene = (
   }
 
   function spawnGameObjects(k: KAPLAYCtx<{}, never>) {
-    spawnTrees(k);
     spawnClouds(k);
-    spawnEnemies(k);
+    k.wait(3, () => spawnTrees(k));
+    k.wait(3, () => spawnEnemies(k));
   }
 
   function spawnPortal(k: KAPLAYCtx<{}, never>) {
@@ -178,62 +179,97 @@ export const initGameScene = (
     ]);
   }
 
-  /* MAIN */
-  k.setGravity(1600);
-  const player = k.add([
-    k.sprite(playerSprite),
-    k.pos(80, 100),
-    k.area(),
-    k.body(),
-  ]);
-  const worldLimit = k.add([
-    k.rect(1, k.height()),
-    k.pos(-100, 0),
-    k.area(),
-    'limit',
-  ]);
+  function initCountdown() {
+    const countdown = (number: number | string) => {
+      return k.make([
+        k.text(String(number)),
+        k.scale(SCALE + 2),
+        k.pos(k.width() / 2, k.height() / 2),
+      ]);
+    };
+    const three = countdown(3);
+    const two = countdown(2);
+    const one = countdown(1);
+    const go = countdown('GO !');
+    k.add(three);
+    k.wait(1, () => {
+      three.destroy();
+      k.add(two);
+    });
+    k.wait(2, () => {
+      two.destroy();
+      k.add(one);
+    });
+    k.wait(3, () => {
+      one.destroy();
+      k.add(go);
+    });
+    k.wait(3.5, () => {
+      go.destroy();
+      main();
+    });
+  }
+
+  function main() {
+    k.setGravity(1600);
+    const player = k.add([
+      k.sprite(playerSprite),
+      k.pos(80, 100),
+      k.area(),
+      k.body(),
+    ]);
+    const worldLimit = k.add([
+      k.rect(1, k.height()),
+      k.pos(-100, 0),
+      k.area(),
+      'limit',
+    ]);
 
   generateWorld(k);
-  k.onKeyPress('space', () => jump(player));
-  k.onClick(() => jump(player));
-  spawnGameObjects(k);
-  // menu if player collides with any game obj with tag "collider"
-  player.onCollide('collider', () => {
-    k.addKaboom(player.pos);
-    k.shake(60);
-    k.burp({ volume: 0.5 /* detune: 800 */ });
-    k.wait(0.3, () => k.go('menu-score', level, playerSprite, false));
-    k.addKaboom(player.pos);
-    k.wait(0.1, () => k.addKaboom(player.pos));
-    k.wait(0.2, () => k.addKaboom(player.pos));
-    k.wait(0.3, () => k.addKaboom(player.pos));
-  });
 
-  player.onCollide('portal', () => {
-    k.shake(180);
-    k.burp({ volume: 0.5, detune: 100 });
-    //TODO: add portal sound
-    level++;
-    k.wait(0.2, () => k.go('menu-score', level, playerSprite, true));
-  });
+    k.onKeyRelease('space', () => jump(player));
+    k.onClick(() => jump(player));
+    spawnGameObjects(k);
+    // menu if player collides with any game obj with tag "collider"
+    player.onCollide('collider', () => {
+      k.addKaboom(player.pos);
+      k.shake(60);
+      k.burp({ volume: 0.5 /* detune: 800 */ });
+      k.wait(0.3, () => k.go('menu-score', level, playerSprite, false));
+      k.addKaboom(player.pos);
+      k.wait(0.1, () => k.addKaboom(player.pos));
+      k.wait(0.2, () => k.addKaboom(player.pos));
+      k.wait(0.3, () => k.addKaboom(player.pos));
+    });
 
-  k.onCollide('portal', 'tree', (portal, tree) => {
-    //avoid portal to be at the same position that a collider and not prevent winning
-    if (tree.pos.x < portal.pos.x) {
-      portal.pos.x += 50;
-    }
-    if (tree.pos.x > portal.pos.x) {
-      portal.pos.x -= 50;
-    }
-  });
+    player.onCollide('portal', () => {
+      k.shake(180);
+      k.burp({ volume: 0.5, detune: 100 });
+      //TODO: add portal sound
+      level++;
+      k.wait(0.2, () => k.go('menu-score', level, playerSprite, true));
+    });
 
-  k.onCollide('limit', 'moving-object', (_, obj) => {
-    k.destroy(obj);
-  });
+    k.onCollide('portal', 'tree', (portal, tree) => {
+      //avoid portal to be at the same position that a collider and not prevent winning
+      if (tree.pos.x < portal.pos.x) {
+        portal.pos.x += 50;
+      }
+      if (tree.pos.x > portal.pos.x) {
+        portal.pos.x -= 50;
+      }
+    });
 
-  const currentLevelLabel = k.add([k.text(`Level: ${level}`), k.pos(24, 24)]);
-  k.onUpdate(() => {
-    player.use(k.sprite(playerSprite));
-  });
-  k.wait(10 * level, () => spawnPortal(k));
+    k.onCollide('limit', 'moving-object', (_, obj) => {
+      k.destroy(obj);
+    });
+
+    const currentLevelLabel = k.add([k.text(`Level: ${level}`), k.pos(24, 24)]);
+    k.onUpdate(() => {
+      player.use(k.sprite(playerSprite));
+    });
+    k.wait(10 * level, () => spawnPortal(k));
+  }
+  //MAIN
+  initCountdown();
 };
