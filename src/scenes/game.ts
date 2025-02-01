@@ -96,7 +96,7 @@ export const initGameScene = (
 
   function spawnEnemies(k: KAPLAYCtx<{}, never>) {
     const skyRange = k.height() / 2 / SCALING_RATIO;
-    const sizeScaler = k.rand(0.7, 1);
+    const sizeScaler = k.rand(0.7, 1.2);
     const colors = [PALETTE.CottonCandy, PALETTE.Illusion, PALETTE.Twilight];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     const enemie = k.make([
@@ -108,7 +108,7 @@ export const initGameScene = (
       k.rotate(k.rand(-7, 7)),
       k.color(randomColor),
       k.scale(sizeScaler),
-      k.move(k.LEFT, (SPEED * sizeScaler) / 2),
+      k.move(k.LEFT, SPEED * sizeScaler),
       'enemie',
       'collider',
       'moving-object',
