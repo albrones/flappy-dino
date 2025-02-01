@@ -3,7 +3,7 @@ import { characters, PALETTE, SCALE } from '../kaplayLoader';
 
 export const initMenuScoreScene = (
   k: KAPLAYCtx<{}, never>,
-  score: string,
+  level: string,
   playerSprite: string,
   isWinning: boolean | null = null
 ) => {
@@ -74,11 +74,16 @@ export const initMenuScoreScene = (
       k.color(PALETTE.MediumSlateBlue),
       'button',
     ]);
-    btn.add([k.pos(8, 2), k.scale(0.5), k.anchor('right'), k.text('PLAY')]);
+    btn.add([
+      k.pos(8, 2),
+      k.scale(0.5),
+      k.anchor('right'),
+      k.text(level > 1 ? 'NEXT' : 'PLAY'),
+    ]);
     btn.add([k.pos(12, 0), k.sprite('play'), k.scale(0.5), k.anchor('left')]);
 
-    btn.onClick(() => k.go('game', playerSprite));
-    k.onKeyPress('space', () => k.go('game', playerSprite));
+    btn.onClick(() => k.go('game', level, playerSprite));
+    k.onKeyPress('space', () => k.go('game', level, playerSprite));
     return btn;
   }
 
@@ -94,9 +99,9 @@ export const initMenuScoreScene = (
     k.anchor('center'),
   ]);
 
-  if (score) {
-    const scoreText = k.add([
-      k.text(score),
+  if (level) {
+    const levelText = k.add([
+      k.text(`Level: ${level}`),
       k.pos(k.width() / 2, k.height() / 2 + 100),
       k.scale(SCALE),
       k.anchor('center'),

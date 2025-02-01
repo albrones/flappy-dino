@@ -3,6 +3,7 @@ import { PALETTE, SCALE } from '../kaplayLoader';
 
 export const initGameScene = (
   k: KAPLAYCtx<{}, never>,
+  level: number,
   playerSprite: string
 ) => {
   const SCALING_RATIO = 1.67;
@@ -200,7 +201,7 @@ export const initGameScene = (
     k.addKaboom(player.pos);
     k.shake(60);
     k.burp({ volume: 0.5 /* detune: 800 */ });
-    k.wait(0.3, () => k.go('menu-score', score, playerSprite));
+    k.wait(0.3, () => k.go('menu-score', level, playerSprite, false));
     k.addKaboom(player.pos);
     k.wait(0.1, () => k.addKaboom(player.pos));
     k.wait(0.2, () => k.addKaboom(player.pos));
@@ -211,7 +212,8 @@ export const initGameScene = (
     k.shake(180);
     k.burp({ volume: 0.5, detune: 100 });
     //TODO: add portal sound
-    k.wait(0.2, () => k.go('menu-score', score, playerSprite, true));
+    level++;
+    k.wait(0.2, () => k.go('menu-score', level, playerSprite, true));
   });
 
   k.onCollide('portal', 'tree', (portal, tree) => {
@@ -228,11 +230,8 @@ export const initGameScene = (
     k.destroy(obj);
   });
 
-  let score: number = 0;
-  const scoreLabel = k.add([k.text(String(score)), k.pos(24, 24)]);
+  const currentLevelLabel = k.add([k.text(`Level: ${level}`), k.pos(24, 24)]);
   k.onUpdate(() => {
-    score++;
-    scoreLabel.text = String(Math.round(score / 10));
     player.use(k.sprite(playerSprite));
   });
   k.wait(10, () => spawnPortal(k));
