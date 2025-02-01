@@ -1,11 +1,11 @@
 import { KAPLAYCtx } from 'kaplay';
 import { PALETTE, START_VOLUME } from '../kaplayLoader';
 
-export const initUiMenu = (k: KAPLAYCtx<{}, never>) => {
+export const initUI = (k: KAPLAYCtx<{}, never>) => {
   const currentVolume = k.getVolume();
 
-  function initConfigMenu() {
-    menu.add([
+  function initConfigPanel() {
+    const cross = k.make([
       k.sprite('plus'),
       k.pos(menu.width - 32, 0),
       k.rotate(45),
@@ -13,8 +13,15 @@ export const initUiMenu = (k: KAPLAYCtx<{}, never>) => {
       k.color(PALETTE.Lipstick),
       'cross',
     ]);
+    menu.add(cross);
     muteButton.pos = k.vec2(16, 16);
-    menu.add(muteButton);
+    menu.add([
+      k.sprite('sounds'),
+      k.pos(16, 16),
+      k.area(),
+      k.opacity(currentVolume ? 1 : 0.5),
+      'mute',
+    ]);
     k.add(config);
   }
 
@@ -24,8 +31,10 @@ export const initUiMenu = (k: KAPLAYCtx<{}, never>) => {
     k.area(),
     k.opacity(currentVolume ? 1 : 0.5),
     'mute',
+    // { onClick: mute },
   ]);
   function mute() {
+    k.debug.log('aa');
     if (k.getVolume()) {
       k.setVolume(0);
       muteButton.opacity = 0.5;
@@ -57,14 +66,20 @@ export const initUiMenu = (k: KAPLAYCtx<{}, never>) => {
     }
     menuIsOpened = !menuIsOpened;
   }
+  function closeMenu() {
+    k.debug.log('ici');
+    k.destroy(menu);
+
+    menuIsOpened = false;
+  }
   if (k.getSceneName() === 'game') {
     k.add(muteButton);
   } else {
-    initConfigMenu();
+    initConfigPanel();
   }
 
   k.onKeyPress('m', mute);
   k.onClick('mute', mute); //FIXME: not working in config menu
   k.onClick('config', openMenu);
-  k.onClick('cross', openMenu);
+  k.onClick('cross', closeMenu);
 };

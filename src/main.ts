@@ -1,18 +1,18 @@
-import { initUiMenu } from './components/uiMenu';
+import { initUI } from './components/ui';
 import { characters, k } from './kaplayLoader';
 import { initGameScene } from './scenes/game';
-import { initMenuScoreScene } from './scenes/menu-score';
+import { initMenuScoreScene } from './scenes/menu';
 
 let playerSprite = k.choose(characters);
 let level: number = 1;
-k.scene('menu-score', (level, playerSprite, isWinning) => {
-  initUiMenu(k);
+k.scene('menu', (level, playerSprite, isWinning) => {
+  initUI(k);
   initMenuScoreScene(k, level, playerSprite, isWinning);
 });
 k.scene('game', (level, playerSprite) => {
-  initUiMenu(k);
+  initUI(k);
   initGameScene(k, level, playerSprite);
 });
 k.onLoad(() => {
-  k.go('menu-score', level, playerSprite);
+  k.go('menu', level, playerSprite);
 });

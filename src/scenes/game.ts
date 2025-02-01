@@ -145,7 +145,6 @@ export const initGameScene = (
     k.wait(0.16, () => spawnPortal(k));
   }
 
-  
   function generateWorld(k: KAPLAYCtx<{}, never>) {
     const floor = k.add([
       k.sprite('grass'),
@@ -225,7 +224,7 @@ export const initGameScene = (
       'limit',
     ]);
 
-  generateWorld(k);
+    generateWorld(k);
 
     k.onKeyRelease('space', () => jump(player));
     k.onClick(() => jump(player));
@@ -235,7 +234,7 @@ export const initGameScene = (
       k.addKaboom(player.pos);
       k.shake(60);
       k.burp({ volume: 0.5 /* detune: 800 */ });
-      k.wait(0.3, () => k.go('menu-score', level, playerSprite, false));
+      k.wait(0.3, () => k.go('menu', level, playerSprite, false));
       k.addKaboom(player.pos);
       k.wait(0.1, () => k.addKaboom(player.pos));
       k.wait(0.2, () => k.addKaboom(player.pos));
@@ -247,7 +246,7 @@ export const initGameScene = (
       k.burp({ volume: 0.5, detune: 100 });
       //TODO: add portal sound
       level++;
-      k.wait(0.2, () => k.go('menu-score', level, playerSprite, true));
+      k.wait(0.2, () => k.go('menu', level, playerSprite, true));
     });
 
     k.onCollide('portal', 'tree', (portal, tree) => {
