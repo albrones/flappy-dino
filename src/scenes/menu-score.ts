@@ -4,7 +4,8 @@ import { characters, PALETTE, SCALE } from '../kaplayLoader';
 export const initMenuScoreScene = (
   k: KAPLAYCtx<{}, never>,
   score: string,
-  playerSprite: string
+  playerSprite: string,
+  isWinning: boolean | null = null
 ) => {
   let currentCharacterIndex = characters.indexOf(playerSprite);
 
@@ -67,7 +68,7 @@ export const initMenuScoreScene = (
       k.rect(80, 48),
       k.area(),
       k.outline(4),
-      k.pos(k.width() / 2, k.height() / 2 + 160),
+      k.pos(k.width() / 2, k.height() / 2 + 180),
       k.scale(SCALE),
       k.anchor('center'),
       k.color(PALETTE.MediumSlateBlue),
@@ -96,7 +97,23 @@ export const initMenuScoreScene = (
   if (score) {
     const scoreText = k.add([
       k.text(score),
-      k.pos(k.width() / 2, k.height() / 2 + 80),
+      k.pos(k.width() / 2, k.height() / 2 + 100),
+      k.scale(SCALE),
+      k.anchor('center'),
+    ]);
+  }
+  if (isWinning) {
+    const win = k.add([
+      k.text('You WIN!'),
+      k.pos(k.width() / 2, k.height() / 2 - 160),
+      k.scale(SCALE),
+      k.anchor('center'),
+    ]);
+  }
+  if (isWinning === false) {
+    const win = k.add([
+      k.text('You LOOSE!'),
+      k.pos(k.width() / 2, k.height() / 2 - 160),
       k.scale(SCALE),
       k.anchor('center'),
     ]);

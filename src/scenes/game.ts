@@ -124,6 +124,25 @@ export const initGameScene = (
     spawnEnemies(k);
   }
 
+  function spawnPortal(k: KAPLAYCtx<{}, never>) {
+    if (k.get('portal').length > 0) {
+      k.wait(4, () => spawnPortal(k));
+      return;
+    }
+    let portal = k.add([
+      k.sprite('portal'),
+      k.scale(2.2),
+      k.pos(k.width(), 0),
+      k.area(),
+      k.body(),
+      k.move(k.LEFT, SPEED),
+      'portal',
+      'moving-object',
+    ]);
+    k.wait(0.16, () => spawnPortal(k));
+  }
+
+  
   function generateWorld(k: KAPLAYCtx<{}, never>) {
     const floor = k.add([
       k.sprite('grass'),
@@ -188,6 +207,23 @@ export const initGameScene = (
     k.wait(0.3, () => k.addKaboom(player.pos));
   });
 
+  player.onCollide('portal', () => {
+    k.shake(180);
+    k.burp({ volume: 0.5, detune: 100 });
+    //TODO: add portal sound
+    k.wait(0.2, () => k.go('menu-score', score, playerSprite, true));
+  });
+
+  k.onCollide('portal', 'tree', (portal, tree) => {
+    //avoid portal to be at the same position that a collider and not prevent winning
+    if (tree.pos.x < portal.pos.x) {
+      portal.pos.x += 50;
+    }
+    if (tree.pos.x > portal.pos.x) {
+      portal.pos.x -= 50;
+    }
+  });
+
   k.onCollide('limit', 'moving-object', (_, obj) => {
     k.destroy(obj);
   });
@@ -196,7 +232,8 @@ export const initGameScene = (
   const scoreLabel = k.add([k.text(String(score)), k.pos(24, 24)]);
   k.onUpdate(() => {
     score++;
-    scoreLabel.text = String(score);
+    scoreLabel.text = String(Math.round(score / 10));
     player.use(k.sprite(playerSprite));
   });
+  k.wait(10, () => spawnPortal(k));
 };

@@ -127,6 +127,7 @@ k.loadSprite('cloud', assets.cloud.sprite);
 k.loadSprite('sounds', assets.sounds.sprite);
 k.loadSprite('config', assets.config.sprite);
 k.loadSprite('plus', assets.plus.sprite);
+k.loadSprite('portal', assets.portal.sprite);
 
 //load sounds
 k.loadSound('blip', '/audio/score.mp3');

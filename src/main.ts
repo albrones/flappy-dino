@@ -4,9 +4,9 @@ import { initGameScene } from './scenes/game';
 import { initMenuScoreScene } from './scenes/menu-score';
 
 let playerSprite = k.choose(characters);
-k.scene('menu-score', (score, playerSprite) => {
+k.scene('menu-score', (score, playerSprite, isWinning) => {
   initUiMenu(k);
-  initMenuScoreScene(k, score, playerSprite);
+  initMenuScoreScene(k, score, playerSprite, isWinning);
 });
 k.scene('game', (playerSprite) => {
   initUiMenu(k);
