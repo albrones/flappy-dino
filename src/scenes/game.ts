@@ -10,7 +10,8 @@ export const initGameScene = (
   const FLOOR_HEIGHT = 52;
   const SKY_LIMIT = 1;
   const JUMP_FORCE = 800;
-  const SPEED = 480;
+  const DEFAULT_SPEED = 432;
+  const SPEED = DEFAULT_SPEED + 48 * level;
 
   function jump(player: GameObj) {
     player.jump(JUMP_FORCE);
@@ -234,5 +235,5 @@ export const initGameScene = (
   k.onUpdate(() => {
     player.use(k.sprite(playerSprite));
   });
-  k.wait(10, () => spawnPortal(k));
+  k.wait(10 * level, () => spawnPortal(k));
 };
