@@ -12,7 +12,7 @@ export const initGameScene = (
   const JUMP_FORCE = 800;
   const DEFAULT_SPEED = 432;
   const SPEED = DEFAULT_SPEED + 48 * level;
-  const widthHeigthRatio = k.height() / k.width();
+  const heigthWidthRatio = k.height() / k.width();
   let countdown = 3;
 
   function jump(player: GameObj) {
@@ -72,7 +72,7 @@ export const initGameScene = (
     for (let i = 0; i <= nbLeaf; i++) {
       addLeaf(k, tree, i);
     }
-    k.wait(k.rand(0.3 * widthHeigthRatio, 1.7), () => spawnTrees(k));
+    k.wait(k.rand(0.3 * heigthWidthRatio, 1.7), () => spawnTrees(k));
   }
 
   function spawnClouds(k: KAPLAYCtx<{}, never>) {
@@ -95,7 +95,7 @@ export const initGameScene = (
     ]);
     cloud.flipX = isFlipped;
     k.add(cloud);
-    k.wait(k.rand(0.1 * widthHeigthRatio, 1), () => spawnClouds(k));
+    k.wait(k.rand(0.1 * heigthWidthRatio, 1), () => spawnClouds(k));
   }
 
   function spawnEnemies(k: KAPLAYCtx<{}, never>) {
@@ -119,13 +119,14 @@ export const initGameScene = (
     ]);
     enemie.flipX = true;
     k.add(enemie);
-    k.wait(k.rand(1 * widthHeigthRatio, 2.6), () => spawnEnemies(k));
+    k.wait(k.rand(1 * heigthWidthRatio, 2.6), () => spawnEnemies(k));
   }
 
   function spawnGameObjects(k: KAPLAYCtx<{}, never>) {
     spawnClouds(k);
     k.wait(3, () => spawnTrees(k));
     k.wait(3, () => spawnEnemies(k));
+    k.wait(13 * level, () => spawnPortal(k));
   }
 
   function spawnPortal(k: KAPLAYCtx<{}, never>) {
@@ -143,7 +144,7 @@ export const initGameScene = (
       'portal',
       'moving-object',
     ]);
-    k.wait(0.16 * widthHeigthRatio, () => spawnPortal(k));
+    k.wait(0.16 * heigthWidthRatio, () => spawnPortal(k));
   }
 
   function generateWorld(k: KAPLAYCtx<{}, never>) {
@@ -206,7 +207,7 @@ export const initGameScene = (
     });
     k.wait(3.5, () => {
       go.destroy();
-      main();
+      // main();
     });
   }
 
@@ -229,6 +230,7 @@ export const initGameScene = (
 
     k.onKeyRelease('space', () => jump(player));
     k.onClick(() => jump(player));
+    initCountdown();
     spawnGameObjects(k);
     // menu if player collides with any game obj with tag "collider"
     player.onCollide('collider', () => {
@@ -268,8 +270,7 @@ export const initGameScene = (
     k.onUpdate(() => {
       player.use(k.sprite(playerSprite));
     });
-    k.wait(10 * level, () => spawnPortal(k));
   }
-  //MAIN
-  initCountdown();
+
+  main();
 };
