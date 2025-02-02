@@ -12,6 +12,7 @@ export const initGameScene = (
   const JUMP_FORCE = 800;
   const DEFAULT_SPEED = 432;
   const SPEED = DEFAULT_SPEED + 48 * level;
+  const widthHeigthRatio = k.height() / k.width();
   let countdown = 3;
 
   function jump(player: GameObj) {
@@ -71,7 +72,7 @@ export const initGameScene = (
     for (let i = 0; i <= nbLeaf; i++) {
       addLeaf(k, tree, i);
     }
-    k.wait(k.rand(0.3, 1.7), () => spawnTrees(k));
+    k.wait(k.rand(0.3 * widthHeigthRatio, 1.7), () => spawnTrees(k));
   }
 
   function spawnClouds(k: KAPLAYCtx<{}, never>) {
@@ -94,7 +95,7 @@ export const initGameScene = (
     ]);
     cloud.flipX = isFlipped;
     k.add(cloud);
-    k.wait(k.rand(0.1, 1), () => spawnClouds(k));
+    k.wait(k.rand(0.1 * widthHeigthRatio, 1), () => spawnClouds(k));
   }
 
   function spawnEnemies(k: KAPLAYCtx<{}, never>) {
@@ -118,7 +119,7 @@ export const initGameScene = (
     ]);
     enemie.flipX = true;
     k.add(enemie);
-    k.wait(k.rand(1, 2.6), () => spawnEnemies(k));
+    k.wait(k.rand(1 * widthHeigthRatio, 2.6), () => spawnEnemies(k));
   }
 
   function spawnGameObjects(k: KAPLAYCtx<{}, never>) {
@@ -135,14 +136,14 @@ export const initGameScene = (
     let portal = k.add([
       k.sprite('portal'),
       k.scale(2.2),
-      k.pos(k.width(), 0),
+      k.pos(k.width(), /* 0 */ k.height() / 2),
       k.area(),
       k.body(),
       k.move(k.LEFT, SPEED),
       'portal',
       'moving-object',
     ]);
-    k.wait(0.16, () => spawnPortal(k));
+    k.wait(0.16 * widthHeigthRatio, () => spawnPortal(k));
   }
 
   function generateWorld(k: KAPLAYCtx<{}, never>) {
