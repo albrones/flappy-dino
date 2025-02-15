@@ -12,7 +12,7 @@ export const initMenuScoreScene = (
   function generateNewCharacter() {
     return k.make([
       k.sprite(playerSprite),
-      k.pos(k.width() / 2, k.height() / 2),
+      k.pos(k.center()),
       k.scale(SCALE),
       k.anchor('center'),
       'player',
@@ -68,7 +68,7 @@ export const initMenuScoreScene = (
       k.rect(100, 48),
       k.area(),
       k.outline(4),
-      k.pos(k.width() / 2, k.height() / 2 + 400),
+      k.pos(k.center().x, k.center().y + 400),
       k.scale(SCALE),
       k.anchor('center'),
       k.color(PALETTE.MediumSlateBlue),
@@ -92,7 +92,7 @@ export const initMenuScoreScene = (
   if (level) {
     const levelText = k.add([
       k.text(`Level: ${level}`),
-      k.pos(k.width() / 2, k.height() / 2 - 320),
+      k.pos(k.center().x, k.center().y - 320),
       k.scale(SCALE),
       k.anchor('center'),
     ]);
@@ -100,7 +100,7 @@ export const initMenuScoreScene = (
   if (isWinning) {
     const win = k.add([
       k.text('LEVEL PASSED!'),
-      k.pos(k.width() / 2, k.height() / 2 - 200),
+      k.pos(k.center().x, k.center().y - 200),
       k.scale(SCALE),
       k.anchor('center'),
     ]);
@@ -108,7 +108,7 @@ export const initMenuScoreScene = (
   if (isWinning === false) {
     const win = k.add([
       k.text('You LOOSE!'),
-      k.pos(k.width() / 2, k.height() / 2 - 200),
+      k.pos(k.center().x, k.center().y - 200),
       k.scale(SCALE),
       k.anchor('center'),
     ]);
@@ -116,7 +116,7 @@ export const initMenuScoreScene = (
   if (isWinning === null) {
     const win = k.add([
       k.text('START!'),
-      k.pos(k.width() / 2, k.height() / 2 - 200),
+      k.pos(k.center().x, k.center().y - 200),
       k.scale(SCALE),
       k.anchor('center'),
     ]);
@@ -127,7 +127,7 @@ export const initMenuScoreScene = (
   const selectPreviousCharacterBtn = k.add(generateSelectButton());
   const characterName = k.add([
     k.text(playerSprite),
-    k.pos(k.width() / 2, k.height() / 2 + 120),
+    k.pos(k.center().x, k.center().y + 120),
     k.scale(SCALE),
     k.anchor('center'),
   ]);
@@ -135,7 +135,7 @@ export const initMenuScoreScene = (
   const currentDifficultyColor = Math.round(126 * currentDifficultyFactor);
   const difficulty = k.add([
     k.text(`(difficulty x${currentDifficultyFactor})`),
-    k.pos(k.width() / 2, k.height() / 2 + 240),
+    k.pos(k.center().x, k.center().y + 240),
     k.anchor('center'),
     k.color(currentDifficultyColor, 0, 0),
   ]);

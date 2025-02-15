@@ -12,7 +12,7 @@ export function spawnPortal(
   let portal = k.add([
     k.sprite('portal'),
     k.scale(2.2),
-    k.pos(k.width(), /* 0 */ k.height() / 2),
+    k.pos(k.width(), k.center().y),
     k.area(),
     k.body(),
     k.move(k.LEFT, speed),
