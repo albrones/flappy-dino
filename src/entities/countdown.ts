@@ -1,14 +1,25 @@
+import { GameObj } from 'kaplay';
 import { k, SCALE } from '../kaplayLoader';
+import { removeMiniPortailUi } from './portal';
 
-function countdown(number: number | string) {
+export function countdown(number: number | string) {
   return k.make([
     k.text(String(number)),
     k.scale(SCALE + 2),
     k.anchor('center'),
-    k.pos(k.width() / 2, k.height() / 2),
+    k.pos(k.center()),
   ]);
 }
-export function startCountdown() {
+
+function miniCountdown(number: number | string) {
+  return k.make([
+    k.text(String(number)),
+    k.scale(SCALE / 2),
+    k.anchor('center'),
+  ]);
+}
+
+export function startGameCountdown() {
   const three = countdown(3);
   const two = countdown(2);
   const one = countdown(1);
@@ -29,4 +40,20 @@ export function startCountdown() {
   k.wait(3.2, () => {
     go.destroy();
   });
+}
+
+export function startPortalCountdown(portal: GameObj, time: number) {
+  let i = 0;
+  k.loop(
+    1,
+    () => {
+      const current = miniCountdown(time - i);
+      portal.add(current);
+      k.wait(1, () => {
+        current.destroy();
+      });
+      i++;
+    },
+    time
+  ).then(() => removeMiniPortailUi);
 }

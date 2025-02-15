@@ -1,9 +1,9 @@
 import { KAPLAYCtx } from 'kaplay';
 import { spawnClouds } from '../entities/cloud';
-import { startCountdown } from '../entities/countdown';
+import { startGameCountdown } from '../entities/countdown';
 import { spawnEnemies } from '../entities/enemy';
 import { spawnPlayer } from '../entities/player';
-import { spawnPortal } from '../entities/portal';
+import { displayPortalCountdown, spawnPortal } from '../entities/portal';
 import { spawnTrees } from '../entities/tree';
 import { generateWorld } from '../entities/world';
 import { k } from '../kaplayLoader';
@@ -27,12 +27,13 @@ export const initGameScene = (
     k.wait(3, () => spawnTrees(k, speed, heigthWidthRatio));
     k.wait(3, () => spawnEnemies(k, speed, heigthWidthRatio));
     k.wait(13 * level, () => spawnPortal(k, speed, heigthWidthRatio));
+    k.wait(3, () => displayPortalCountdown(k));
   }
   function main() {
     k.setGravity(1600);
     const player = spawnPlayer(k, level, speed, playerSprite);
     generateWorld(k);
-    startCountdown();
+    startGameCountdown();
     spawnGameObjects(k);
 
     const currentLevelLabel = k.add([k.text(`Level: ${level}`), k.pos(24, 24)]);
