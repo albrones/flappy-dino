@@ -25,8 +25,7 @@ export const initMenuScoreScene = (
       k.sprite('arrow'),
       k.area(),
       k.outline(4),
-      k.pos(k.width() / 2 + 160 * sign, k.height() / 2),
-      k.scale(1.5),
+      k.pos(80 * sign, 0),
       k.anchor('center'),
       k.rotate(right ? 0 : 180),
       k.color(PALETTE.MediumSlateBlue),
@@ -68,7 +67,7 @@ export const initMenuScoreScene = (
       k.rect(100, 48),
       k.area(),
       k.outline(4),
-      k.pos(k.center().x, k.center().y + 400),
+      k.pos(k.center().x, k.height() * 0.8),
       k.scale(SCALE),
       k.anchor('center'),
       k.color(PALETTE.MediumSlateBlue),
@@ -92,7 +91,7 @@ export const initMenuScoreScene = (
   if (level) {
     const levelText = k.add([
       k.text(`Level: ${level}`),
-      k.pos(k.center().x, k.center().y - 320),
+      k.pos(k.center().x, k.height() * 0.15),
       k.scale(SCALE),
       k.anchor('center'),
     ]);
@@ -100,7 +99,7 @@ export const initMenuScoreScene = (
   if (isWinning) {
     const win = k.add([
       k.text('LEVEL PASSED!'),
-      k.pos(k.center().x, k.center().y - 200),
+      k.pos(k.center().x, k.height() * 0.3),
       k.scale(SCALE),
       k.anchor('center'),
     ]);
@@ -108,7 +107,7 @@ export const initMenuScoreScene = (
   if (isWinning === false) {
     const win = k.add([
       k.text('You LOOSE!'),
-      k.pos(k.center().x, k.center().y - 200),
+      k.pos(k.center().x, k.height() * 0.3),
       k.scale(SCALE),
       k.anchor('center'),
     ]);
@@ -116,26 +115,27 @@ export const initMenuScoreScene = (
   if (isWinning === null) {
     const win = k.add([
       k.text('START!'),
-      k.pos(k.center().x, k.center().y - 200),
+      k.pos(k.center().x, k.height() * 0.3),
       k.scale(SCALE),
       k.anchor('center'),
     ]);
   }
 
   const character = k.add(generateNewCharacter());
-  const selectNextCharacterBtn = k.add(generateSelectButton(true));
-  const selectPreviousCharacterBtn = k.add(generateSelectButton());
+  const selectNextCharacterBtn = character.add(generateSelectButton(true));
+  const selectPreviousCharacterBtn = character.add(generateSelectButton());
   const characterName = k.add([
     k.text(playerSprite),
-    k.pos(k.center().x, k.center().y + 120),
+    k.pos(k.center().x, k.height() * 0.65),
     k.scale(SCALE),
     k.anchor('center'),
   ]);
   const currentDifficultyFactor = 1 + (level - 1) / 10;
   const currentDifficultyColor = Math.round(126 * currentDifficultyFactor);
+  //TODO add select for version/mode of the game [level or time] : if level => difficulty show + activate portal ... else if time redo minimal flappy game
   const difficulty = k.add([
     k.text(`(difficulty x${currentDifficultyFactor})`),
-    k.pos(k.center().x, k.center().y + 240),
+    k.pos(k.center().x, k.height() * 0.9),
     k.anchor('center'),
     k.color(currentDifficultyColor, 0, 0),
   ]);
