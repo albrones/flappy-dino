@@ -1,7 +1,8 @@
 import { KAPLAYCtx } from 'kaplay';
-import { k } from '../kaplayLoader';
+import { k } from '../../kaplayLoader';
 import { startPortalCountdown } from './countdown';
 
+//escape
 export function spawnPortal(
   k: KAPLAYCtx<{}, never>,
   speed: number,
@@ -23,7 +24,7 @@ export function spawnPortal(
   ]);
   k.wait(0.16 * difficulty, () => spawnPortal(k, speed, difficulty));
 }
-
+//escape
 export function displayPortalCountdown(k: KAPLAYCtx<{}, never>) {
   const miniPortal = k.add([
     k.sprite('portal'),
@@ -34,7 +35,7 @@ export function displayPortalCountdown(k: KAPLAYCtx<{}, never>) {
   startPortalCountdown(miniPortal, 10);
   k.wait(10, removeMiniPortailUi);
 }
-
+//escape
 export function removeMiniPortailUi() {
   k.get('mini-portal')[0].destroy();
 }

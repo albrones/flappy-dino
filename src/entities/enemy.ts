@@ -12,7 +12,7 @@ export function spawnEnemies(
   const colors = [PALETTE.CottonCandy, PALETTE.Illusion, PALETTE.Twilight];
   const randomColor = colors[Math.floor(Math.random() * colors.length)];
   const enemie = k.make([
-    k.sprite('goldfly'),
+    k.sprite('goldfly'), //escape change emeny sprite for each level + endless specific enemy sprite
     k.rotate(180),
     k.area(),
     k.pos(k.width() + 50, k.rand(SKY_LIMIT + 50, skyRange - 50)),

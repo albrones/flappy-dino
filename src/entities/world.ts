@@ -2,7 +2,7 @@ import { KAPLAYCtx } from 'kaplay';
 import { PALETTE } from '../kaplayLoader';
 import { SKY_LIMIT } from '../scenes/game';
 
-export function generateWorld(k: KAPLAYCtx<{}, never>) {
+export function generateWorld(k: KAPLAYCtx<{}, never>, endless: boolean) {
   const worldLimit = k.add([
     k.rect(1, k.height()),
     k.pos(-100, 0),
@@ -40,15 +40,17 @@ export function generateWorld(k: KAPLAYCtx<{}, never>) {
     'sky',
   ]);
 
-  k.onCollide('portal', 'tree', (portal, tree) => {
-    //avoid portal to be at the same position that a collider and not prevent winning
-    if (tree.pos.x < portal.pos.x) {
-      portal.pos.x += 50;
-    }
-    if (tree.pos.x > portal.pos.x) {
-      portal.pos.x -= 50;
-    }
-  });
+  if (!endless) {
+    k.onCollide('portal', 'tree', (portal, tree) => {
+      //avoid portal to be at the same position that a collider and not prevent winning
+      if (tree.pos.x < portal.pos.x) {
+        portal.pos.x += 50;
+      }
+      if (tree.pos.x > portal.pos.x) {
+        portal.pos.x -= 50;
+      }
+    });
+  }
 
   k.onCollide('limit', 'moving-object', (_, obj) => {
     k.destroy(obj);

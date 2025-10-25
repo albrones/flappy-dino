@@ -20,12 +20,19 @@ function jump(player: GameObj, speed: number) {
   });
 }
 
-export function spawnPlayer(
-  k: KAPLAYCtx<{}, never>,
-  level: number,
-  speed: number,
-  playerSprite: string
-) {
+export function spawnPlayer({
+  k,
+  level,
+  speed,
+  playerSprite,
+  endless,
+}: {
+  k: KAPLAYCtx<{}, never>;
+  level: number;
+  speed: number;
+  playerSprite: string;
+  endless: boolean;
+}) {
   const player = k.add([
     k.sprite(playerSprite),
     k.pos(80, 100),
@@ -38,20 +45,22 @@ export function spawnPlayer(
     k.addKaboom(player.pos);
     k.shake(60);
     k.burp({ volume: 0.5 /* detune: 800 */ });
-    k.wait(0.3, () => k.go('menu', level, playerSprite, false));
+    k.wait(0.3, () => k.go('menu', level, playerSprite, false, endless));
     k.addKaboom(player.pos);
     k.wait(0.1, () => k.addKaboom(player.pos));
     k.wait(0.2, () => k.addKaboom(player.pos));
     k.wait(0.3, () => k.addKaboom(player.pos));
   });
 
-  player.onCollide('portal', () => {
-    k.shake(180);
-    k.burp({ volume: 0.5, detune: 100 });
-    //TODO: add portal sound
-    level++;
-    k.wait(0.2, () => k.go('menu', level, playerSprite, true));
-  });
+  if (!endless) {
+    player.onCollide('portal', () => {
+      k.shake(180);
+      k.burp({ volume: 0.5, detune: 100 });
+      //TODO: add portal sound
+      level++;
+      k.wait(0.2, () => k.go('menu', level, playerSprite, true));
+    });
+  }
 
   k.onKeyRelease('space', () => jump(player, speed));
   k.onClick(() => jump(player, speed));

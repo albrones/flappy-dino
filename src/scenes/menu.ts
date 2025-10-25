@@ -1,12 +1,19 @@
 import { KAPLAYCtx } from 'kaplay';
 import { characters, PALETTE, SCALE } from '../kaplayLoader';
 
-export const initMenuScoreScene = (
-  k: KAPLAYCtx<{}, never>,
-  level: number,
-  playerSprite: string,
-  isWinning: boolean | null = null
-) => {
+export const initMenuScoreScene = ({
+  k,
+  level,
+  playerSprite,
+  isWinning,
+  endless,
+}: {
+  k: KAPLAYCtx<{}, never>;
+  level: number;
+  playerSprite: string;
+  isWinning: boolean | null;
+  endless: boolean;
+}) => {
   let currentCharacterIndex = characters.indexOf(playerSprite);
 
   function generateNewCharacter() {
@@ -62,33 +69,62 @@ export const initMenuScoreScene = (
     characterName.use(k.text(playerSprite));
   }
 
-  function generatePlayButton() {
+  function generateEscapeButton() {
     const btn = k.make([
       k.rect(100, 48),
       k.area(),
       k.outline(4),
-      k.pos(k.center().x, k.height() * 0.8),
+      k.pos(k.center().x - 120, k.height() * 0.8),
       k.scale(SCALE),
       k.anchor('center'),
       k.color(PALETTE.MediumSlateBlue),
       'button',
     ]);
+    const pos = level > 1 ? -16 : 0;
     btn.add([
-      k.pos(8, 2),
+      k.pos(pos, 0),
       k.scale(0.5),
-      k.anchor('right'),
-      k.text(level > 1 ? 'NEXT' : 'PLAY'),
+      k.anchor('center'),
+      k.text(level > 1 ? 'NEXT' : 'ESCAPE'),
     ]);
-    btn.add([k.pos(16, 0), k.sprite('play'), k.scale(0.5), k.anchor('left')]);
+    if (level > 1) {
+      btn.add([k.pos(16, 0), k.sprite('play'), k.scale(0.5), k.anchor('left')]);
+      k.onKeyPress('space', () => {
+        endless = false;
+        return k.go('game', level, playerSprite, endless);
+      });
+    }
 
-    btn.onClick(() => k.go('game', level, playerSprite));
-    k.onKeyPress('space', () => k.go('game', level, playerSprite));
+    btn.onClick(() => {
+      endless = false;
+      return k.go('game', level, playerSprite, endless);
+    });
+    return btn;
+  }
+
+  function generateEndlessButton() {
+    const btn = k.make([
+      k.rect(100, 48),
+      k.area(),
+      k.outline(4),
+      k.pos(k.center().x + 120, k.height() * 0.8),
+      k.scale(SCALE),
+      k.anchor('center'),
+      k.color(PALETTE.VinRouge),
+      'button',
+    ]);
+    btn.add([k.scale(0.5), k.anchor('center'), k.text('ENDLESS')]);
+
+    btn.onClick(() => {
+      endless = true;
+      return k.go('game', level, playerSprite, endless);
+    });
     return btn;
   }
 
   /* MAIN */
   k.setBackground(k.Color.fromHex(PALETTE.LightSkyBlue));
-  if (level) {
+  if (level && !endless) {
     const levelText = k.add([
       k.text(`Level: ${level}`),
       k.pos(k.center().x, k.height() * 0.15),
@@ -96,7 +132,7 @@ export const initMenuScoreScene = (
       k.anchor('center'),
     ]);
   }
-  if (isWinning) {
+  if (isWinning && endless) {
     const win = k.add([
       k.text('LEVEL PASSED!'),
       k.pos(k.center().x, k.height() * 0.3),
@@ -104,8 +140,16 @@ export const initMenuScoreScene = (
       k.anchor('center'),
     ]);
   }
-  if (isWinning === false) {
+  if (isWinning == false && endless) {
     const win = k.add([
+      k.text('NICE TRY!'),
+      k.pos(k.center().x, k.height() * 0.3),
+      k.scale(SCALE),
+      k.anchor('center'),
+    ]);
+  }
+  if (isWinning === false && !endless) {
+    const loose = k.add([
       k.text('You LOOSE!'),
       k.pos(k.center().x, k.height() * 0.3),
       k.scale(SCALE),
@@ -113,9 +157,15 @@ export const initMenuScoreScene = (
     ]);
   }
   if (isWinning === null) {
-    const win = k.add([
-      k.text('START!'),
-      k.pos(k.center().x, k.height() * 0.3),
+    const escape = k.add([
+      k.text('ESCAPE!'),
+      k.pos(k.center().x - 50, k.height() * 0.3),
+      k.scale(SCALE),
+      k.anchor('center'),
+    ]);
+    const endless = k.add([
+      k.text('ENDLESS!'),
+      k.pos(k.center().x - 50, k.height() * 0.3),
       k.scale(SCALE),
       k.anchor('center'),
     ]);
@@ -132,12 +182,12 @@ export const initMenuScoreScene = (
   ]);
   const currentDifficultyFactor = 1 + (level - 1) / 10;
   const currentDifficultyColor = Math.round(126 * currentDifficultyFactor);
-  //TODO add select for version/mode of the game [level or time] : if level => difficulty show + activate portal ... else if time redo minimal flappy game
   const difficulty = k.add([
     k.text(`(difficulty x${currentDifficultyFactor})`),
     k.pos(k.center().x, k.height() * 0.9),
     k.anchor('center'),
     k.color(currentDifficultyColor, 0, 0),
   ]);
-  const playButton = k.add(generatePlayButton());
+  const escapeBtn = k.add(generateEscapeButton());
+  const endlessBtn = k.add(generateEndlessButton());
 };
