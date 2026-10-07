@@ -149,28 +149,13 @@ export const initMenuScoreScene = ({
     ]);
   }
   if (isWinning === false && !endless) {
-    const loose = k.add([
-      k.text('You LOOSE!'),
+    const lose = k.add([
+      k.text('You LOSE!'),
       k.pos(k.center().x, k.height() * 0.3),
       k.scale(SCALE),
       k.anchor('center'),
     ]);
   }
-  if (isWinning === null) {
-    const escape = k.add([
-      k.text('ESCAPE!'),
-      k.pos(k.center().x - 50, k.height() * 0.3),
-      k.scale(SCALE),
-      k.anchor('center'),
-    ]);
-    const endless = k.add([
-      k.text('ENDLESS!'),
-      k.pos(k.center().x - 50, k.height() * 0.3),
-      k.scale(SCALE),
-      k.anchor('center'),
-    ]);
-  }
-
   const character = k.add(generateNewCharacter());
   const selectNextCharacterBtn = character.add(generateSelectButton(true));
   const selectPreviousCharacterBtn = character.add(generateSelectButton());
