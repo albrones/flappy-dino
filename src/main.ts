@@ -16,5 +16,5 @@ k.scene('game', (level, playerSprite, endless) => {
   initGameScene({ k, level, playerSprite, endless });
 });
 k.onLoad(() => {
-  k.go('menu', level, playerSprite, endless);
+  k.go('menu', level, playerSprite, isWinning, endless);
 });
